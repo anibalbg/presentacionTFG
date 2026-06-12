@@ -1,0 +1,100 @@
+@startuml
+title Diagrama de clases vista
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam packageStyle rectangle
+top to bottom direction
+
+abstract class Vista <<vista>> {
+  +mostrarInformacion()
+  +recogerAccionUsuario()
+}
+
+class VistaLogin <<vista>> {
+  +introducirCredenciales()
+  +enviarCredenciales()
+}
+
+class VistaJugador <<vista>> {
+  +mostrarMenuJugador()
+  +accederEscaneoQR()
+  +accederClips()
+  +accederEstadisticasPersonales()
+}
+
+class VistaAdministrador <<vista>> {
+  +mostrarMenuAdministrador()
+  +accederGestionClips()
+  +accederUsuarios()
+  +accederEstadisticasGlobales()
+}
+
+class VistaEscaneoQR <<vista>> {
+  +abrirCamaraMovil()
+  +escanearCodigoQR()
+  +mostrarContextoCaptura()
+}
+
+class VistaListadoClips <<vista>> {
+  +mostrarClips()
+  +seleccionarClip()
+}
+
+class VistaDetalleClip <<vista>> {
+  +mostrarDetalleClip()
+  +reproducirClip()
+  +marcarDesmarcarFavorito()
+}
+
+class VistaEstadisticasPersonales <<vista>> {
+  +mostrarResumenPersonal()
+  +mostrarResumenPorHoyo()
+}
+
+class VistaGestionClips <<vista>> {
+  +mostrarClipsRegistrados()
+  +consultarDetalleClip()
+  +eliminarClip()
+}
+
+class VistaUsuariosAdministrador <<vista>> {
+  +mostrarUsuarios()
+  +seleccionarUsuario()
+}
+
+class VistaGestionUsuarios <<vista>> {
+  +mostrarDetalleUsuario()
+  +eliminarUsuario()
+}
+
+class VistaEstadisticasGlobales <<vista>> {
+  +mostrarResumenGlobal()
+  +mostrarClipsPorHoyo()
+  +mostrarActividadSistema()
+}
+
+Vista <|-- VistaLogin
+Vista <|-- VistaJugador
+Vista <|-- VistaAdministrador
+Vista <|-- VistaEscaneoQR
+Vista <|-- VistaListadoClips
+Vista <|-- VistaDetalleClip
+Vista <|-- VistaEstadisticasPersonales
+Vista <|-- VistaGestionClips
+Vista <|-- VistaUsuariosAdministrador
+Vista <|-- VistaGestionUsuarios
+Vista <|-- VistaEstadisticasGlobales
+
+VistaJugador --> VistaEscaneoQR : accede
+VistaJugador --> VistaListadoClips : consulta
+VistaJugador --> VistaEstadisticasPersonales : consulta
+VistaListadoClips --> VistaDetalleClip : abre
+
+VistaAdministrador --> VistaGestionClips : gestiona
+VistaAdministrador --> VistaUsuariosAdministrador : consulta
+VistaUsuariosAdministrador --> VistaGestionUsuarios : abre
+VistaAdministrador --> VistaEstadisticasGlobales : consulta
+
+@enduml

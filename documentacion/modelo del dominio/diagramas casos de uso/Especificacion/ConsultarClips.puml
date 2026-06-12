@@ -1,0 +1,23 @@
+@startuml
+title CU-03. Consultar clips generados
+
+actor "Jugador/Administrador" as Usuario
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Usuario -> App: Solicita consultar clips
+App -> Backend: Solicitar lista de clips
+Backend -> Backend: Comprobar permisos del usuario
+
+alt Usuario jugador
+    Backend -> BD: Buscar clips del jugador
+else Usuario administrador
+    Backend -> BD: Buscar clips accesibles para administrador
+end
+
+BD --> Backend: Devolver clips encontrados
+Backend --> App: Enviar lista de clips
+App --> Usuario: Mostrar clips generados
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+[*] --> EnProcesamiento
+
+EnProcesamiento --> Disponible : procesamiento completado
+EnProcesamiento --> Fallido : error de generación
+
+Disponible --> Favorito : marcar como favorito
+Favorito --> Disponible : desmarcar favorito
+
+Disponible --> Expirado : tiempo de conservación agotado
+Expirado --> Eliminado : limpieza automática
+
+@enduml

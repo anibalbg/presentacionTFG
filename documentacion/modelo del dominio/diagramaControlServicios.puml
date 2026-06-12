@@ -1,0 +1,72 @@
+@startuml
+title Diagrama de clases de control y servicios
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+package "Vistas" {
+  class VistaLogin
+  class VistaJugador
+  class VistaAdministrador
+  class VistaEscaneoQR
+  class VistaListadoClips
+  class VistaDetalleClip
+  class VistaReproduccionClip
+  class VistaEstadisticasPersonales
+  class VistaClipsAdministrador
+  class VistaGestionUsuarios
+  class VistaEstadisticasGlobales
+}
+
+package "Controladores" {
+  class ControladorIniciarSesion
+  class ControladorCerrarSesion
+  class ControladorEscanearQR
+  class ControladorConsultarClips
+  class ControladorReproducirClip
+  class ControladorGestionarFavorito
+  class ControladorConsultarEstadisticas
+  class ControladorGestionarUsuarios
+  class ControladorGestionarClips
+  class ControladorProcesarEvento
+}
+
+package "Servicios internos" {
+  class ServicioDeteccionSwing
+  class ServicioProcesamientoVideo
+  class ServicioEliminacionAutomatica
+  class RepositorioUsuarios
+  class RepositorioClips
+  class RepositorioSesiones
+  class RepositorioCamaras
+}
+
+VistaLogin --> ControladorIniciarSesion
+VistaJugador --> ControladorCerrarSesion
+VistaAdministrador --> ControladorCerrarSesion
+VistaEscaneoQR --> ControladorEscanearQR
+VistaListadoClips --> ControladorConsultarClips
+VistaDetalleClip --> ControladorGestionarFavorito
+VistaReproduccionClip --> ControladorReproducirClip
+VistaEstadisticasPersonales --> ControladorConsultarEstadisticas
+VistaClipsAdministrador --> ControladorGestionarClips
+VistaGestionUsuarios --> ControladorGestionarUsuarios
+VistaEstadisticasGlobales --> ControladorConsultarEstadisticas
+
+ControladorEscanearQR --> RepositorioCamaras
+ControladorEscanearQR --> RepositorioSesiones
+
+ControladorConsultarClips --> RepositorioClips
+ControladorReproducirClip --> RepositorioClips
+ControladorGestionarFavorito --> RepositorioClips
+
+ControladorGestionarUsuarios --> RepositorioUsuarios
+ControladorConsultarEstadisticas --> RepositorioClips
+
+ControladorProcesarEvento --> ServicioDeteccionSwing
+ControladorProcesarEvento --> ServicioProcesamientoVideo
+ServicioProcesamientoVideo --> RepositorioClips
+ServicioEliminacionAutomatica --> RepositorioClips
+
+@enduml

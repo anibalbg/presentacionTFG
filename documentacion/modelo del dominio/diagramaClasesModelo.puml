@@ -1,0 +1,73 @@
+@startuml
+title Diagrama de clases modelo
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+class Usuario {
+  - id
+  - nombreUsuario
+  - email
+  - contraseña
+  - fechaRegistro
+  - tipoUsuario
+}
+
+class Campo {
+  - id
+  - nombre
+  - ubicacion
+}
+
+class Hoyo {
+  - id
+  - numero
+  - par
+}
+
+class Camara {
+  - id
+  - nombre
+  - rol
+  - estado
+}
+
+
+class SesionCaptura {
+  - id
+  - fechaInicio
+  - fechaFin
+  - estado
+}
+
+class EventoDetectado {
+  - id
+  - instanteDeteccion
+  - tipoEvento
+  - valido
+  - confianza
+}
+
+class Clip {
+  - id
+  - archivo
+  - fechaCreacion
+  - estado
+  - esFavorito
+  - fechaExpiracion
+  -vistasIncluidas
+}
+
+
+Campo "1" *-- "1..*" Hoyo
+Hoyo "1" o-- "1..*" Camara
+
+Usuario "1" -- "0..*" SesionCaptura
+SesionCaptura "1" -- "1" Hoyo
+SesionCaptura "1" *-- "0..*" EventoDetectado
+
+EventoDetectado "1" -- "0..1" Clip
+Usuario "1" -- "0..*" Clip
+Hoyo "1" -- "0..*" Clip
+
+@enduml

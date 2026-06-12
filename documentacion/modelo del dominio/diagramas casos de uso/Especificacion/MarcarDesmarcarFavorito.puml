@@ -1,0 +1,25 @@
+@startuml
+title CU-04. Marcar/Desmarcar clip como favorito
+
+actor "Jugador/Administrador" as Usuario
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Usuario -> App: Pulsa marcar/desmarcar favorito
+App -> Backend: Enviar solicitud de cambio de favorito
+Backend -> BD: Buscar clip seleccionado
+BD --> Backend: Clip encontrado
+Backend -> Backend: Comprobar permisos de acceso
+
+alt Permiso válido
+    Backend -> BD: Actualizar estado de favorito
+    BD --> Backend: Clip actualizado
+    Backend --> App: Confirmar cambio
+    App --> Usuario: Mostrar nuevo estado del clip
+else Permiso no válido
+    Backend --> App: Devolver error de permisos
+    App --> Usuario: Mostrar mensaje de error
+end
+
+@enduml

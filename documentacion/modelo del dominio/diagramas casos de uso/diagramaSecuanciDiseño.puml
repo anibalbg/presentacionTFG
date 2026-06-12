@@ -1,0 +1,38 @@
+@startuml
+title Diagrama de secuencia de diseño - CU-02 Escanear código QR del hoyo
+
+actor Jugador
+boundary VistaEscaneoQR
+control ControladorEscanearQR
+entity CodigoQR
+entity Campo
+entity Hoyo
+entity Camara
+entity SesionCaptura
+database RepositorioSesiones
+
+Jugador -> VistaEscaneoQR : escanearCodigoQR()
+VistaEscaneoQR -> ControladorEscanearQR : procesarQR(valorQR)
+
+ControladorEscanearQR -> CodigoQR : validar(valorQR)
+CodigoQR --> ControladorEscanearQR : QR válido
+
+ControladorEscanearQR -> Hoyo : obtenerHoyoAsociado()
+Hoyo --> ControladorEscanearQR : hoyo
+
+ControladorEscanearQR -> Campo : obtenerCampo()
+Campo --> ControladorEscanearQR : campo
+
+ControladorEscanearQR -> Camara : obtenerCamarasDelHoyo(hoyo)
+Camara --> ControladorEscanearQR : listaCamaras
+
+ControladorEscanearQR -> SesionCaptura : crear(usuario, campo, hoyo, camaras)
+SesionCaptura --> ControladorEscanearQR : sesionActiva
+
+ControladorEscanearQR -> RepositorioSesiones : guardar(sesionActiva)
+RepositorioSesiones --> ControladorEscanearQR : confirmacion
+
+ControladorEscanearQR --> VistaEscaneoQR : contextoActivado(campo, hoyo)
+VistaEscaneoQR --> Jugador : mostrarConfirmacion()
+
+@enduml

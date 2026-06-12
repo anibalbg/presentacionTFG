@@ -1,0 +1,85 @@
+@startuml
+title Diagrama de clases controladoras por caso de uso
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+left to right direction
+
+package "Clases vista" {
+  class VistaLogin <<vista>>
+  class VistaEscaneoQR <<vista>>
+  class VistaListadoClips <<vista>>
+  class VistaDetalleClip <<vista>>
+  class VistaEstadisticasPersonales <<vista>>
+  class VistaGestionClips <<vista>>
+  class VistaUsuariosAdministrador <<vista>>
+  class VistaGestionUsuarios <<vista>>
+  class VistaEstadisticasGlobales <<vista>>
+}
+
+package "Clases controladoras" {
+  class ControladorLogin <<controlador>>
+  class ControladorEscanearQR <<controlador>>
+  class ControladorConsultarClipsGenerados <<controlador>>
+  class ControladorMarcarClipFavorito <<controlador>>
+  class ControladorConsultarEstadisticasPersonales <<controlador>>
+  class ControladorGestionarClipsRegistrados <<controlador>>
+  class ControladorConsultarUsuariosSistema <<controlador>>
+  class ControladorGestionarUsuariosSistema <<controlador>>
+  class ControladorConsultarEstadisticasGlobales <<controlador>>
+}
+
+package "Clases modelo" {
+  class Usuario <<modelo>>
+  class Campo <<modelo>>
+  class Hoyo <<modelo>>
+  class Camara <<modelo>>
+  class SesionCaptura <<modelo>>
+  class Clip <<modelo>>
+}
+
+' Relaciones Vista -> Controlador
+VistaLogin --> ControladorLogin : CU-01
+VistaEscaneoQR --> ControladorEscanearQR : CU-02
+VistaListadoClips --> ControladorConsultarClipsGenerados : CU-03
+VistaDetalleClip --> ControladorMarcarClipFavorito : CU-04
+VistaEstadisticasPersonales --> ControladorConsultarEstadisticasPersonales : CU-05
+VistaGestionClips --> ControladorGestionarClipsRegistrados : CU-06
+VistaUsuariosAdministrador --> ControladorConsultarUsuariosSistema : CU-07
+VistaGestionUsuarios --> ControladorGestionarUsuariosSistema : CU-08
+VistaEstadisticasGlobales --> ControladorConsultarEstadisticasGlobales : CU-09
+
+' Relaciones Controlador -> Modelo
+ControladorLogin --> Usuario
+
+ControladorEscanearQR --> Usuario
+ControladorEscanearQR --> Camara
+ControladorEscanearQR --> Campo
+ControladorEscanearQR --> Hoyo
+ControladorEscanearQR --> SesionCaptura
+
+ControladorConsultarClipsGenerados --> Usuario
+ControladorConsultarClipsGenerados --> Clip
+ControladorConsultarClipsGenerados --> Campo
+ControladorConsultarClipsGenerados --> Hoyo
+
+ControladorMarcarClipFavorito --> Usuario
+ControladorMarcarClipFavorito --> Clip
+
+ControladorConsultarEstadisticasPersonales --> Usuario
+ControladorConsultarEstadisticasPersonales --> Clip
+
+ControladorGestionarClipsRegistrados --> Usuario
+ControladorGestionarClipsRegistrados --> Clip
+
+ControladorConsultarUsuariosSistema --> Usuario
+
+ControladorGestionarUsuariosSistema --> Usuario
+
+ControladorConsultarEstadisticasGlobales --> Usuario
+ControladorConsultarEstadisticasGlobales --> Clip
+
+@enduml

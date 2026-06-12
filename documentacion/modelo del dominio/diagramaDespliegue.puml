@@ -1,0 +1,64 @@
+@startuml
+title Diagrama de despliegue simplificado del sistema
+
+skinparam shadowing false
+skinparam linetype ortho
+skinparam defaultFontSize 12
+skinparam nodeFontSize 13
+skinparam componentStyle rectangle
+
+left to right direction
+
+actor "Jugador / Administrador" as Usuario
+
+node "Dispositivo móvil" as Movil {
+  artifact "App móvil\nExpo / React Native" as App
+}
+
+node "Campo de golf" as Campo {
+  node "Cámaras IP" as Camaras {
+    artifact "TEE" as TEE
+    artifact "BACK" as BACK
+    artifact "GREEN" as GREEN
+  }
+
+  artifact "Red local\nRouter / Switch PoE" as Red
+}
+
+node "Nodo de IA" as IA {
+  artifact "Captura RTSP" as Captura
+  artifact "Detección de swing\nYOLO + MediaPipe + OpenCV" as Deteccion
+  artifact "Generación de segmentos" as Segmentos
+}
+
+node "Servidor backend" as Backend {
+  artifact "API REST Django" as API
+  artifact "Autenticación JWT" as Auth
+  artifact "Gestión QR y cámaras" as QR
+  artifact "Gestión de clips" as Clips
+  artifact "Streaming de vídeo" as Stream
+  artifact "FFmpeg" as FFmpeg
+}
+
+database "Base de datos" as BD
+node "Almacenamiento multimedia" as Media
+
+Usuario --> App : Usa
+App --> API : HTTPS / REST
+App --> Stream : Reproduce clips
+
+Camaras --> Red : RTSP
+Red --> IA : RTSP
+
+IA --> API : Estado cámara\nSubida de segmentos
+IA --> QR : Notificación de swing
+
+API --> Auth
+API --> QR
+API --> Clips
+API --> Stream
+API --> BD : Persistencia
+API --> Media : Guarda clips
+FFmpeg --> Media : Recodifica y concatena
+
+@enduml

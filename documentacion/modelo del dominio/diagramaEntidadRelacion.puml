@@ -1,0 +1,129 @@
+@startuml
+title Diagrama entidad-relación del sistema
+
+skinparam shadowing false
+skinparam linetype ortho
+hide circle
+
+entity "Usuario" as Usuario {
+  * id_usuario : entero <<PK>>
+  --
+  nombre_usuario : texto
+  email : texto
+  contrasena_hash : texto
+  fecha_registro : fecha/hora
+  activo : booleano
+  tipo_usuario : texto
+}
+
+entity "Campo" as Campo {
+  * id_campo : entero <<PK>>
+  --
+  nombre : texto
+  ubicacion : texto
+}
+
+entity "Hoyo" as Hoyo {
+  * id_hoyo : entero <<PK>>
+  --
+  id_campo : entero <<FK>>
+  numero : entero
+  par : entero
+}
+
+entity "Camara" as Camara {
+  * id_camara : entero <<PK>>
+  --
+  id_hoyo : entero <<FK>>
+  posición : texto
+  activo : booleano
+}
+
+entity "CodigoQR" as CodigoQR {
+  * id_qr : entero <<PK>>
+  --
+  id_hoyo : entero <<FK>>
+  id_camara : entero <<FK nullable>>
+  url : texto
+  fecha_creacion : fecha/hora
+  activo : booleano
+}
+
+entity "SesionCaptura" as SesionCaptura {
+  * id_sesion : entero <<PK>>
+  --
+  id_usuario : entero <<FK>>
+  id_hoyo : entero <<FK>>
+  id_qr : entero <<FK>>
+  fecha_inicio : fecha/hora
+  fecha_fin : fecha/hora
+  activo : booleano
+}
+
+entity "EventoDetectado" as EventoDetectado {
+  * id_evento : entero <<PK>>
+  --
+  id_sesion : entero <<FK>>
+  instante_deteccion : fecha/hora
+  tipo_evento : texto
+  valido : booleano
+  confianza : decimal
+}
+
+entity "Clip" as Clip {
+  * id_clip : entero <<PK>>
+  --
+  id_usuario : entero <<FK>>
+  id_hoyo : entero <<FK>>
+  id_evento : entero <<FK>>
+  archivo : texto
+  fecha_creacion : fecha/hora
+  favorito : booleano
+  fecha_expiracion : fecha/hora
+}
+
+entity "SegmentoClip" as SegmentoClip {
+  * id_segmento : entero <<PK>>
+  --
+  id_clip : entero <<FK>>
+  id_camara : entero <<FK>>
+  tipo_vista : texto
+  orden : entero
+  archivo_segmento : texto
+}
+
+entity "Estadistica <<derivada>>" as Estadistica {
+  --
+  id_usuario : entero <<FK nullable>>
+  total_clips : entero
+  total_favoritos : entero
+  hoyos_jugados : entero
+  fecha_generacion : fecha/hora
+  tipo : texto
+}
+
+Campo ||--o{ Hoyo : contiene
+
+Hoyo ||--o{ Camara : tiene
+Hoyo ||--o{ CodigoQR : identifica
+
+Camara |o--o{ CodigoQR : puede_generar
+
+Usuario ||--o{ SesionCaptura : activa
+Hoyo ||--o{ SesionCaptura : contextualiza
+CodigoQR ||--o{ SesionCaptura : inicia
+
+SesionCaptura ||--o{ EventoDetectado : registra
+EventoDetectado ||--o| Clip : genera
+
+Usuario ||--o{ Clip : posee
+Hoyo ||--o{ Clip : se_produce_en
+
+Clip ||--o{ SegmentoClip : se_compone_de
+Camara ||--o{ SegmentoClip : captura
+
+Usuario ..> Estadistica : consulta
+Clip ..> Estadistica : calcula
+
+
+@enduml

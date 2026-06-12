@@ -1,0 +1,10 @@
+@startuml
+
+actor Usuario
+actor Jugador
+actor Administrador
+
+Usuario <|-- Jugador
+Usuario <|-- Administrador
+
+@enduml

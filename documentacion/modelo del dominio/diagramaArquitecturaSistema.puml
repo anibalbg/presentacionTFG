@@ -1,0 +1,62 @@
+@startuml
+title Diagrama de arquitectura del sistema
+
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Jugador" as Jugador
+actor "Administrador" as Administrador
+
+package "Capa de presentación" {
+  component "Aplicación móvil" as App
+}
+
+package "Capa de procesamiento" {
+  component "Módulo de procesamiento de vídeo" as Procesamiento
+  component "Servicio de detección de swing" as Deteccion
+  component "Servicio de generación de clip" as GeneracionClip
+}
+
+package "Capa de servicios" {
+  component "Backend / API REST" as Backend
+  component "Autenticación y usuarios" as AutenticacionUsuarios
+  component "Gestión de sesiones" as Sesiones
+  component "Gestión de clips" as Clips
+  component "Comprobar permisos" as Permisos
+  component "Cálculo de estadísticas" as Estadisticas
+}
+
+package "Capa de persistencia" {
+  database "Base de datos" as BD
+  folder "Almacenamiento de vídeo" as Almacenamiento
+}
+
+package "Capa de captura" {
+  component "Cámaras del hoyo TEE / BACK / GREEN" as Camaras
+}
+
+Jugador --> App : inicia sesión\nactiva captura del hoyo\nconsulta clips
+Administrador --> App : consulta y gestiona\nusuarios y clips
+
+App --> Backend : peticiones HTTP/API
+
+Backend --> AutenticacionUsuarios : autentica usuario\ngestiona cuentas
+Backend --> Sesiones : crea/actualiza sesión
+Backend --> Permisos : comprueba permisos
+Backend --> Clips : gestiona clips
+Backend --> Estadisticas : calcula estadísticas
+
+Camaras --> Procesamiento : vídeo capturado
+
+Procesamiento --> Deteccion : analiza frames
+Deteccion --> GeneracionClip : evento válido detectado
+GeneracionClip --> Backend : envía clip generado
+
+Backend --> BD : guarda usuarios,\nsesiones, cámaras,\nclips y metadatos
+Backend --> BD : consulta datos para\nestadísticas
+Backend --> Almacenamiento : guarda y recupera vídeos
+Backend --> App : devuelve clips,\nestadísticas y respuestas
+Backend --> Camaras : activa captura\nsegún contexto del hoyo
+
+@enduml

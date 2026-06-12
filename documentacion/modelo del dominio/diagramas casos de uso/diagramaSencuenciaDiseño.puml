@@ -1,0 +1,31 @@
+@startuml
+title Diagrama de secuencia de diseño - Generación automática de clip
+
+participant Camara
+control ServicioDeteccionSwing
+control ServicioProcesamientoVideo
+entity EventoDetectado
+entity Clip
+database RepositorioClips
+database AlmacenamientoVideo
+
+Camara -> ServicioDeteccionSwing : enviarFrames(video)
+ServicioDeteccionSwing -> ServicioDeteccionSwing : analizarMovimientoJugador()
+ServicioDeteccionSwing -> ServicioDeteccionSwing : detectarBola()
+ServicioDeteccionSwing -> EventoDetectado : crearEvento(instante, confianza, valido)
+
+alt evento válido
+    EventoDetectado --> ServicioProcesamientoVideo : eventoValidado
+    ServicioProcesamientoVideo -> ServicioProcesamientoVideo : recortarPrePostRoll()
+    ServicioProcesamientoVideo -> ServicioProcesamientoVideo : convertirFormatoMP4()
+    ServicioProcesamientoVideo -> AlmacenamientoVideo : guardarArchivo(videoProcesado)
+    AlmacenamientoVideo --> ServicioProcesamientoVideo : rutaArchivo
+
+    ServicioProcesamientoVideo -> Clip : crear(usuario, hoyo, evento, rutaArchivo)
+    ServicioProcesamientoVideo -> RepositorioClips : guardar(clip)
+    RepositorioClips --> ServicioProcesamientoVideo : clipDisponible
+else evento no válido
+    ServicioDeteccionSwing --> Camara : descartarEvento()
+end
+
+@enduml

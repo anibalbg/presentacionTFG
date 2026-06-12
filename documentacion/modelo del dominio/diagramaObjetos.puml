@@ -1,0 +1,50 @@
+@startuml
+top to bottom direction
+object "usuario1:Usuario" as usuario1 {
+  idUsuario = 1
+  nombre = "Aníbal Bayas"
+  email = "anibal@example.com"
+  rol = "jugador"
+}
+
+object "campoPrueba:Campo" as campo1 {
+  idCampo = 1
+  nombre = "CampoPrueba"
+  ubicacion = "Santander"
+}
+
+object "hoyo1:Hoyo" as hoyo1 {
+  idHoyo = 1
+  numero = 1
+  par = 3
+  distancia = 145.0
+}
+
+object "sesion1:Sesion" as sesion1 {
+  idSesion = 101
+  fechaHoraInicio = "2026-03-20 10:15"
+  fechaHoraFin = "2026-03-20 10:25"
+  estado = "finalizada"
+}
+
+object "eventoDetectado1:EventoDetectado" as eventoDetectado1 {
+  idEventoDetectado = 501
+  fechaHora = "2026-03-20 10:18"
+  valido = true
+}
+
+object "clip1:Clip" as clip1 {
+  idClip = 9001
+  fechaHoraCreacion = "2026-03-20 10:18"
+  duracion = 7.0
+  urlAlmacenamiento = "/clips/9001.mp4"
+  favorito = false
+  fechaExpiracion = "2026-03-22 10:18"
+}
+
+campo1 -- hoyo1 : contiene
+usuario1 -- sesion1 : realiza
+hoyo1 -- sesion1 : alberga
+sesion1 -- eventoDetectado1 : incluye
+eventoDetectado1 -- clip1 : genera
+@enduml

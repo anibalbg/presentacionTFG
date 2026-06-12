@@ -1,0 +1,17 @@
+@startuml
+title CU-01. Login
+
+actor "Jugador/Administrador" as Usuario
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Usuario -> App: Introduce email/usuario y contraseña
+App -> Backend: Enviar credenciales
+Backend -> BD: Buscar usuario registrado
+BD --> Backend: Usuario encontrado
+Backend -> Backend: Validar contraseña y rol
+Backend --> App: Devolver token de acceso y datos del usuario
+App --> Usuario: Mostrar pantalla principal según rol
+
+@enduml

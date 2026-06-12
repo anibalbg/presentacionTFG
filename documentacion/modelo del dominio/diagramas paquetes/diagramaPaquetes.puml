@@ -1,0 +1,64 @@
+@startuml
+title Diagrama de paquetes del sistema
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam defaultFontSize 12
+skinparam packageFontSize 13
+skinparam linetype ortho
+
+top to bottom direction
+
+package "Presentacion\n- VistaLogin\n- VistaJugador\n- VistaAdministrador\n- VistaEscaneoQR\n- VistaListadoClips\n- VistaDetalleClip\n- VistaEstadisticasPersonales\n- VistaGestionClips\n- VistaUsuariosAdministrador\n- VistaGestionUsuarios\n- VistaEstadisticasGlobales" as Presentacion
+
+package "Autenticacion\n- Usuario\n- ControladorLogin" as Autenticacion
+
+package "Captura\n- Campo\n- Hoyo\n- Camara\n- SesionCaptura\n- ControladorEscanearQR" as Captura
+
+package "Procesamiento\n- EventoDetectado\n- ServicioDeteccionSwing\n- ServicioProcesamientoVideo\n- ServicioComposicionClip" as Procesamiento
+
+package "Clips\n- Clip\n- ControladorConsultarClipsGenerados\n- ControladorMarcarDesmarcarClipFavorito\n- ServicioEliminacionAutomatica" as Clips
+
+package "Administracion\n- ControladorGestionarClipsRegistrados\n- ControladorConsultarUsuariosSistema\n- ControladorGestionarUsuariosSistema" as Administracion
+
+package "Estadisticas\n- ServicioCalculoEstadisticas\n- ControladorConsultarEstadisticasPersonales\n- ControladorConsultarEstadisticasGlobales" as Estadisticas
+
+package "Persistencia\n- RepositorioUsuarios\n- RepositorioClips\n- RepositorioSesiones\n- RepositorioCamaras\n- AlmacenamientoVideo" as Persistencia
+
+' Organización visual en vertical
+Presentacion -[hidden]down-> Autenticacion
+Autenticacion -[hidden]down-> Captura
+Captura -[hidden]down-> Procesamiento
+Procesamiento -[hidden]down-> Clips
+Clips -[hidden]down-> Administracion
+Administracion -[hidden]down-> Estadisticas
+Estadisticas -[hidden]down-> Persistencia
+
+' Dependencias principales desde presentación
+Presentacion --> Autenticacion
+Presentacion --> Captura
+Presentacion --> Clips
+Presentacion --> Administracion
+Presentacion --> Estadisticas
+
+' Flujo funcional principal
+Captura --> Procesamiento
+Procesamiento --> Clips
+
+' Dependencias entre paquetes de negocio
+Clips --> Autenticacion
+Administracion --> Autenticacion
+Administracion --> Clips
+Administracion --> Estadisticas
+Estadisticas --> Clips
+Estadisticas --> Autenticacion
+
+' Acceso a persistencia
+Autenticacion --> Persistencia
+Captura --> Persistencia
+Procesamiento --> Persistencia
+Clips --> Persistencia
+Administracion --> Persistencia
+Estadisticas --> Persistencia
+
+@enduml
