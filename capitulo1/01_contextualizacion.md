@@ -67,7 +67,7 @@ De esta forma, el sistema elimina la necesidad de que el jugador coloque manualm
 
 ---
 
-## 2. Marco tecnológico
+## 2. Marco teórico
 
 El sistema desarrollado se apoya en varias tecnologías principales:
 
