@@ -1,0 +1,19 @@
+@startuml
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 12
+
+actor Administrador
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Administrador -> App : Solicita estadísticas globales
+App -> Backend : Pedir estadísticas del sistema
+Backend -> BD : Calcular estadísticas globales
+BD --> Backend : Resultados
+Backend --> App : Enviar estadísticas
+App --> Administrador : Mostrar estadísticas globales
+
+@enduml

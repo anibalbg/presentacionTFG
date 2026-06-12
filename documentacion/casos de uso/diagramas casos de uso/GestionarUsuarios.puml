@@ -1,0 +1,21 @@
+@startuml
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 12
+
+actor Administrador
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Administrador -> App : Selecciona operación sobre usuario
+App -> Backend : Solicitar acción de gestión
+Backend -> BD : Verificar usuario y permisos
+BD --> Backend : Validación correcta
+Backend -> BD : Aplicar cambios
+BD --> Backend : Resultado actualizado
+Backend --> App : Confirmación / error
+App --> Administrador : Mostrar resultado de la gestión
+
+@enduml

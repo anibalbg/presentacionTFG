@@ -1,0 +1,19 @@
+@startuml
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 12
+
+actor Administrador
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Administrador -> App : Solicita consultar usuarios
+App -> Backend : Pedir listado de usuarios
+Backend -> BD : Recuperar usuarios registrados
+BD --> Backend : Lista de usuarios
+Backend --> App : Enviar listado
+App --> Administrador : Mostrar usuarios del sistema
+
+@enduml

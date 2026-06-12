@@ -1,0 +1,21 @@
+@startuml
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 12
+
+actor Jugador
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Jugador -> App : Escanea código QR
+App -> Backend : Enviar identificador del QR
+Backend -> BD : Buscar campo y hoyo asociados al QR
+BD --> Backend : Campo y hoyo encontrados
+Backend -> BD : Asociar sesión activa al campo y hoyo
+BD --> Backend : Asociación realizada
+Backend --> App : Confirmación de asociación
+App --> Jugador : Mostrar campo y hoyo vinculados
+
+@enduml

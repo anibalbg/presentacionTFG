@@ -1,0 +1,19 @@
+@startuml
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam defaultFontSize 12
+
+actor Jugador
+participant "Aplicación móvil" as App
+participant "Backend" as Backend
+database "Base de datos" as BD
+
+Jugador -> App : Solicita estadísticas personales
+App -> Backend : Pedir datos estadísticos del usuario
+Backend -> BD : Calcular estadísticas personales
+BD --> Backend : Resultados
+Backend --> App : Enviar estadísticas
+App --> Jugador : Mostrar estadísticas personales
+
+@enduml
