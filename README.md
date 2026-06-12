@@ -2,260 +2,138 @@
 
 **Trabajo Final de Grado:** Diseño e implementación de un sistema automatizado de captura de golpes en golf mediante visión por computador y arquitectura distribuida.  
 **Autor:** Aníbal Bayas Galindo  
-**Enfoque de la defensa:** proceso de ingeniería de software: dominio, requisitos, análisis, diseño, arquitectura, datos, vistas e implementación.
+**Formato:** presentación en README para recorrer el repositorio durante la defensa.  
+**Criterio seguido:** esta presentación sigue el **modelo lógico y de diseño descrito en el TFG**. Las diferencias concretas del prototipo implementado se reservan para la explicación oral o para la sección final de implementación.
 
 ---
 
-## Índice de la presentación
+## Índice de exposición
 
-1. [Planteamiento del problema](#1-planteamiento-del-problema)
-2. [Solución propuesta](#2-solución-propuesta)
-3. [Modelo del dominio](#3-modelo-del-dominio)
-4. [Requisitos del sistema](#4-requisitos-del-sistema)
-5. [Casos de uso](#5-casos-de-uso)
-6. [Diagrama de contexto global](#6-diagrama-de-contexto-global)
-7. [Flujo de actividad principal](#7-flujo-de-actividad-principal)
-8. [Diagramas de secuencia](#8-diagramas-de-secuencia)
-9. [Modelo MVC de análisis](#9-modelo-mvc-de-análisis)
-10. [Prototipos de vistas](#10-prototipos-de-vistas)
-11. [Arquitectura del sistema](#11-arquitectura-del-sistema)
-12. [Modelo lógico de datos](#12-modelo-lógico-de-datos)
-13. [Modelo de despliegue](#13-modelo-de-despliegue)
-14. [Organización del código](#14-organización-del-código)
-15. [Trazabilidad entre requisitos, diseño e implementación](#15-trazabilidad-entre-requisitos-diseño-e-implementación)
-16. [Validación y cierre](#16-validación-y-cierre)
+1. [Problema y objetivo del sistema](#1-problema-y-objetivo-del-sistema)
+2. [Modelo del dominio](#2-modelo-del-dominio)
+3. [Requisitos del sistema](#3-requisitos-del-sistema)
+4. [Actores y casos de uso](#4-actores-y-casos-de-uso)
+5. [Contexto global y evolución del sistema](#5-contexto-global-y-evolución-del-sistema)
+6. [Flujos de actividad de los casos de uso principales](#6-flujos-de-actividad-de-los-casos-de-uso-principales)
+7. [Diagramas de secuencia](#7-diagramas-de-secuencia)
+8. [Modelo MVC de análisis](#8-modelo-mvc-de-análisis)
+9. [Prototipos de vistas](#9-prototipos-de-vistas)
+10. [Arquitectura del sistema](#10-arquitectura-del-sistema)
+11. [Modelo de datos](#11-modelo-de-datos)
+12. [Modelo de despliegue](#12-modelo-de-despliegue)
+13. [Organización del código](#13-organización-del-código)
+14. [Relación entre diseño e implementación](#14-relación-entre-diseño-e-implementación)
+15. [Validación del prototipo](#15-validación-del-prototipo)
+16. [Cierre](#16-cierre)
 
 ---
 
-## 1. Planteamiento del problema
+## 1. Problema y objetivo del sistema
 
-El punto de partida del proyecto es una limitación habitual en la práctica del golf: el registro de golpes depende normalmente de una grabación manual, de la colocación previa de un dispositivo o de la ayuda de otra persona. Esto provoca tres problemas principales:
+El proyecto parte de una limitación habitual en la práctica del golf: la grabación de golpes suele depender de una acción manual del jugador, de otra persona o de un dispositivo colocado previamente.
 
-| Problema detectado | Consecuencia en el usuario | Necesidad de ingeniería |
+| Problema identificado | Consecuencia | Necesidad del sistema |
 |---|---|---|
-| Grabación manual | El jugador interrumpe la práctica | Automatizar la captura |
-| Un único punto de vista | Información visual incompleta | Incorporar varias cámaras |
-| Falta de asociación contextual | El vídeo no queda vinculado al hoyo o usuario | Gestionar sesiones, usuarios y clips |
+| Grabación manual del golpe | Interrumpe la práctica deportiva | Automatizar la captura |
+| Captura desde un único ángulo | Información visual incompleta | Usar varias cámaras |
+| Falta de contexto del vídeo | El clip no queda asociado al usuario, campo u hoyo | Gestionar sesión, usuario y hoyo |
+| Dificultad para revisar golpes | El usuario no dispone de un histórico claro | Consultar clips y estadísticas |
 
-El objetivo no es solo construir una aplicación, sino diseñar un sistema completo capaz de transformar un evento deportivo real en información digital persistente, consultable y trazable.
-
----
-
-## 2. Solución propuesta
-
-La solución propuesta es un sistema automatizado de captura de golpes de golf mediante cámaras fijas, visión por computador, backend y aplicación móvil.
-
-```mermaid
-flowchart LR
-    J[Jugador] -->|1. Inicia sesión| APP[Aplicación móvil]
-    J -->|2. Escanea QR del hoyo| APP
-    APP -->|camera_uuid| API[Backend / API]
-    API -->|activa contexto| CAM[Cámaras del hoyo]
-    CAM -->|vídeo continuo| IA[Módulo de visión por computador]
-    IA -->|swing válido + segmentos| API
-    API -->|genera y almacena clip| BD[(Base de datos)]
-    API --> MEDIA[(Almacenamiento de vídeo)]
-    APP -->|consulta y reproduce| API
-```
-
-La solución se apoya en cuatro ideas principales:
-
-| Decisión | Función dentro del sistema |
-|---|---|
-| Activación mediante QR | Relaciona usuario, campo, hoyo y cámaras |
-| Visión por computador | Detecta el swing y valida el evento deportivo |
-| Backend centralizado | Gestiona usuarios, sesiones, clips, permisos y estadísticas |
-| Aplicación móvil | Permite activar el sistema, consultar clips y gestionar favoritos |
+**Objetivo general:** diseñar e implementar un sistema capaz de detectar automáticamente un golpe de golf, generar un clip de vídeo desde distintas perspectivas y asociarlo al usuario y al hoyo correspondiente.
 
 ---
 
-## 3. Modelo del dominio
+## 2. Modelo del dominio
 
-El modelo del dominio representa los conceptos reales del problema antes de entrar en detalles técnicos. Es la base para los requisitos, los casos de uso, el modelo de datos y el diseño posterior.
+El modelo del dominio es el punto de partida del proceso de ingeniería. Representa los conceptos del problema antes de hablar de pantallas, base de datos o código.
 
-### 3.1 Conceptos principales
+### 2.1 Conceptos principales
 
-| Concepto | Significado en el dominio |
+| Concepto | Papel dentro del dominio |
 |---|---|
-| Usuario | Persona que utiliza el sistema. Puede actuar como jugador o administrador. |
-| Jugador | Usuario que activa la captura y consulta sus clips. |
-| Administrador | Usuario con permisos de supervisión sobre clips, usuarios y estadísticas. |
+| Usuario | Persona registrada en el sistema. Puede actuar como jugador o administrador. |
+| Jugador | Activa la captura mediante QR y consulta sus clips. |
+| Administrador | Supervisa usuarios, clips y estadísticas globales. |
 | Campo | Instalación deportiva donde se ubican los hoyos. |
-| Hoyo | Unidad de juego dentro de un campo. Contextualiza cada captura. |
-| Cámara | Dispositivo físico asociado a un hoyo y con un rol concreto. |
-| Código QR | Identificador visual que permite activar el contexto de captura. |
-| Sesión de captura | Intervalo en el que un usuario queda asociado a un hoyo y a sus cámaras. |
-| Evento detectado | Swing o acción candidata detectada por el sistema. |
-| Clip | Vídeo generado tras validar el evento y procesar los segmentos. |
-| Estadística | Información derivada de clips, usuarios, hoyos y favoritos. |
+| Hoyo | Unidad de juego donde se produce el golpe. |
+| Cámara | Dispositivo asociado a un hoyo y a un rol de captura. |
+| Código QR | Identificador visual usado para activar el contexto de captura. |
+| Sesión de captura | Asociación temporal entre usuario, campo, hoyo y cámaras. |
+| Evento detectado | Acción deportiva identificada como swing candidato o válido. |
+| Clip | Vídeo generado a partir de un evento válido. |
+| Estadística | Información derivada de clips, usuarios y actividad registrada. |
 
-### 3.2 Diagrama de clases del dominio
+### 2.2 Artefactos del modelo del dominio
 
-```mermaid
-classDiagram
-    class Usuario {
-        +idUsuario
-        +nombreUsuario
-        +email
-        +tipoUsuario
-    }
+| Artefacto | Archivo |
+|---|---|
+| Modelo del dominio simplificado | [diagramaModeloDominio.puml](<documentacion/modelo del dominio/diagramaModeloDominio.puml>) |
+| Diagrama de clases del dominio | [diagramaClases.puml](<documentacion/modelo del dominio/diagramaClases.puml>) |
+| Diagrama de objetos | [diagramaObjetos.puml](<documentacion/modelo del dominio/diagramaObjetos.puml>) |
+| Diagrama de estados | [diagramaEstados.puml](<documentacion/modelo del dominio/diagramaEstados.puml>) |
 
-    class Jugador
-    class Administrador
+### 2.3 Idea central del dominio
 
-    class Campo {
-        +idCampo
-        +nombre
-        +ubicacion
-    }
-
-    class Hoyo {
-        +idHoyo
-        +numero
-        +par
-        +distancia
-    }
-
-    class Camara {
-        +idCamara
-        +uuid
-        +nombre
-        +rol
-        +activa
-    }
-
-    class CodigoQR {
-        +valor
-        +tipo
-    }
-
-    class SesionCaptura {
-        +idSesion
-        +fechaInicio
-        +fechaFin
-        +estado
-    }
-
-    class EventoDetectado {
-        +idEvento
-        +fechaHora
-        +tipo
-        +valido
-    }
-
-    class Clip {
-        +idClip
-        +fechaCreacion
-        +archivo
-        +favorito
-        +fechaExpiracion
-    }
-
-    class Estadistica {
-        +tipo
-        +valor
-        +periodo
-    }
-
-    Usuario <|-- Jugador
-    Usuario <|-- Administrador
-    Campo "1" *-- "1..*" Hoyo
-    Hoyo "1" o-- "1..*" Camara
-    CodigoQR "1" --> "1" Camara : identifica
-    Usuario "1" --> "0..*" SesionCaptura : activa
-    Hoyo "1" --> "0..*" SesionCaptura : contextualiza
-    Camara "1..*" --> "0..*" SesionCaptura : participa
-    SesionCaptura "1" --> "0..*" EventoDetectado : registra
-    EventoDetectado "1" --> "0..1" Clip : genera
-    Usuario "1" --> "0..*" Clip : posee
-    Hoyo "1" --> "0..*" Clip : produce
-    Usuario "1" --> "0..*" Estadistica : consulta
-    Clip "1..*" --> "0..*" Estadistica : calcula
-```
-
-### 3.3 Idea clave del dominio
-
-El sistema no se limita a guardar vídeos. El modelo del dominio mantiene la trazabilidad completa:
+El sistema no guarda vídeos de forma aislada. Cada clip tiene trazabilidad desde el usuario hasta el contexto deportivo en el que se genera.
 
 ```text
-Usuario -> Sesión de captura -> Evento detectado -> Clip generado -> Consulta posterior
+Usuario -> Sesión de captura -> Evento detectado -> Clip
                  |
               Campo / Hoyo / Cámaras
 ```
 
 ---
 
-## 4. Requisitos del sistema
+## 3. Requisitos del sistema
 
-Los requisitos se agrupan según la responsabilidad funcional que cumplen dentro del sistema.
+Los requisitos transforman el problema en funcionalidades y restricciones verificables.
 
-### 4.1 Requisitos funcionales agrupados
+### 3.1 Requisitos funcionales agrupados
 
 | Grupo | Requisitos | Finalidad |
 |---|---|---|
-| Identificación y contexto | RF-01 a RF-04 | Autenticar al usuario y activar el contexto del hoyo mediante QR. |
-| Detección del evento | RF-05 a RF-07 | Detectar el swing válido diferenciándolo de movimientos previos. |
-| Generación del clip | RF-08 a RF-11 | Crear, procesar y almacenar el vídeo asociado al golpe. |
-| Asociación y trazabilidad | RF-12 a RF-14 | Mantener relación entre usuario, sesión, evento, hoyo y clip. |
-| Consulta y reproducción | RF-15 a RF-17 | Permitir al usuario acceder a sus clips disponibles. |
+| Identificación y activación | RF-01 a RF-04 | Autenticar al usuario y activar el contexto del hoyo mediante QR. |
+| Detección del evento deportivo | RF-05 a RF-07 | Detectar el swing de salida y diferenciarlo de movimientos previos. |
+| Generación del clip | RF-08 a RF-11 | Crear, procesar y almacenar el vídeo resultante. |
+| Asociación y trazabilidad | RF-12 a RF-14 | Relacionar usuario, sesión, evento, campo, hoyo y clip. |
+| Consulta y reproducción | RF-15 a RF-17 | Permitir que el usuario acceda a sus clips. |
 | Conservación y favoritos | RF-18 a RF-22 | Marcar favoritos y aplicar caducidad a clips no conservados. |
-| Estadísticas y administración | RF-23 a RF-26 | Ofrecer estadísticas y funciones de gestión al administrador. |
+| Estadísticas y administración | RF-23 a RF-26 | Consultar estadísticas y gestionar usuarios o clips desde administración. |
 
-### 4.2 Requisitos suplementarios
+### 3.2 Requisitos suplementarios
 
-| Categoría | Decisión de diseño asociada |
+| Categoría | Aplicación en el diseño |
 |---|---|
-| Rendimiento | Procesamiento de vídeo separado y generación de clips en formato reproducible. |
-| Fiabilidad | Validación del swing mediante varias señales visuales y control de errores. |
-| Seguridad | Autenticación, permisos y separación entre jugador y administrador. |
-| Disponibilidad | Componentes diferenciados para captura, backend, almacenamiento y app móvil. |
-| Mantenibilidad | Organización modular de IA, backend y aplicación móvil. |
-| Portabilidad | Configuración mediante variables y separación entre lógica y entorno. |
-| Usabilidad | Flujo simple: iniciar sesión, escanear QR, consultar clips. |
+| Rendimiento | El procesamiento de vídeo se separa del uso normal de la app. |
+| Fiabilidad | La detección combina información corporal y visual de la bola. |
+| Seguridad | El acceso se controla por autenticación y permisos. |
+| Disponibilidad | El sistema se divide en componentes independientes. |
+| Mantenibilidad | Se separan captura, IA, backend, persistencia y app móvil. |
+| Portabilidad | La arquitectura permite ejecutar componentes en nodos distintos. |
+| Usabilidad | El flujo del jugador se reduce a iniciar sesión, escanear QR y consultar clips. |
 
 ---
 
-## 5. Casos de uso
+## 4. Actores y casos de uso
 
-Los casos de uso representan los servicios que el sistema ofrece a los actores. Todos parten de un actor externo, como exige el análisis de requisitos.
+Los casos de uso muestran los servicios que el sistema ofrece a los actores externos. El actor siempre es el punto inicial de la interacción.
 
-### 5.1 Diagrama de casos de uso
+### 4.1 Actores
 
-```mermaid
-flowchart LR
-    Usuario((Usuario))
-    Jugador((Jugador))
-    Admin((Administrador))
+| Actor | Responsabilidad |
+|---|---|
+| Usuario | Generalización de jugador y administrador. |
+| Jugador | Activa la captura y consulta su contenido. |
+| Administrador | Supervisa el sistema y gestiona recursos. |
 
-    Usuario <--- Jugador
-    Usuario <--- Admin
+### 4.2 Artefactos de casos de uso
 
-    CU01([CU-01 Login])
-    CU02([CU-02 Escanear código QR del hoyo])
-    CU03([CU-03 Consultar clips generados])
-    CU04([CU-04 Marcar / desmarcar clip favorito])
-    CU05([CU-05 Consultar estadísticas personales])
-    CU06([CU-06 Gestionar clips registrados])
-    CU07([CU-07 Consultar usuarios del sistema])
-    CU08([CU-08 Gestionar usuarios del sistema])
-    CU09([CU-09 Consultar estadísticas globales])
+| Artefacto | Archivo |
+|---|---|
+| Jerarquía de actores | [diagramaJerarquiaActores.puml](<documentacion/casos de uso/diagramaJerarquiaActores.puml>) |
+| Diagrama de casos de uso | [diagramaCasosDeUso.puml](<documentacion/casos de uso/diagramaCasosDeUso.puml>) |
 
-    Jugador --> CU01
-    Jugador --> CU02
-    Jugador --> CU03
-    Jugador --> CU04
-    Jugador --> CU05
-
-    Admin --> CU01
-    Admin --> CU03
-    Admin --> CU04
-    Admin --> CU06
-    Admin --> CU07
-    Admin --> CU08
-    Admin --> CU09
-```
-
-### 5.2 Priorización
+### 4.3 Casos de uso identificados
 
 | Código | Caso de uso | Actor principal | Prioridad |
 |---|---|---|---|
@@ -271,280 +149,131 @@ flowchart LR
 
 ---
 
-## 6. Diagrama de contexto global
+## 5. Contexto global y evolución del sistema
 
-El contexto global muestra cómo el sistema cambia de estado a través de los casos de uso. No representa solo componentes, sino la evolución del sistema desde el acceso del usuario hasta la disponibilidad del clip.
+El contexto global muestra cómo el sistema cambia de estado a través de los casos de uso. La idea principal es que el usuario no interactúa directamente con la IA ni con las cámaras, sino que activa un contexto que el backend coordina.
 
-```mermaid
-stateDiagram-v2
-    [*] --> NoAutenticado
+### 5.1 Estados principales del sistema
 
-    NoAutenticado --> UsuarioAutenticado: CU-01 Login correcto
-    UsuarioAutenticado --> ContextoCapturaActivo: CU-02 Escanear QR
-    ContextoCapturaActivo --> CamarasArmadas: activar sesión de captura
-    CamarasArmadas --> EventoDetectado: detección de swing válido
-    EventoDetectado --> ClipEnProcesamiento: generar segmentos / procesar vídeo
-    ClipEnProcesamiento --> ClipDisponible: clip generado correctamente
-    ClipEnProcesamiento --> FalloProcesamiento: error de generación
+| Estado inicial | Caso de uso que interviene | Estado resultante |
+|---|---|---|
+| Usuario no autenticado | CU-01 Login | Usuario autenticado |
+| Usuario autenticado sin contexto | CU-02 Escanear QR | Sesión de captura activa |
+| Sesión activa sin golpe | Detección automática del evento | Evento detectado |
+| Evento detectado válido | Generación automática de clip | Clip disponible |
+| Clip disponible | CU-03 Consultar clips | Clip consultado o reproducido |
+| Clip disponible | CU-04 Marcar favorito | Clip conservado |
+| Clips y usuarios registrados | CU-05 / CU-09 Estadísticas | Estadísticas calculadas |
+| Clips o usuarios registrados | CU-06 / CU-08 Gestión | Datos actualizados |
 
-    ClipDisponible --> ClipConsultado: CU-03 Consultar / reproducir clip
-    ClipConsultado --> ClipDisponible: volver al listado
+### 5.2 Artefactos relacionados
 
-    ClipDisponible --> ClipFavorito: CU-04 Marcar favorito
-    ClipFavorito --> ClipDisponible: CU-04 Desmarcar favorito
-    ClipDisponible --> ClipExpirado: política de conservación
-    ClipExpirado --> ClipEliminado: eliminación automática
-
-    UsuarioAutenticado --> VistaAdmin: usuario administrador
-    VistaAdmin --> GestionClips: CU-06 Gestionar clips
-    VistaAdmin --> GestionUsuarios: CU-07 / CU-08 Usuarios
-    VistaAdmin --> EstadisticasGlobales: CU-09 Estadísticas globales
-
-    FalloProcesamiento --> [*]
-    ClipEliminado --> [*]
-```
-
-### Lectura del contexto
-
-El flujo principal del jugador es:
-
-```text
-No autenticado -> Autenticado -> Contexto de captura -> Evento detectado -> Clip disponible -> Consulta
-```
-
-El flujo del administrador parte también del login, pero cambia hacia tareas de supervisión:
-
-```text
-Autenticado como administrador -> Clips / Usuarios / Estadísticas globales
-```
-
----
-
-## 7. Flujo de actividad principal
-
-El flujo más importante del sistema es la activación mediante QR y la generación automática del clip.
-
-```mermaid
-flowchart TD
-    A([Inicio]) --> B[Jugador inicia sesión]
-    B --> C[Jugador escanea código QR]
-    C --> D[Aplicación extrae identificador]
-    D --> E[Backend valida identificador]
-    E --> F{¿Cámara / hoyo existen?}
-    F -- No --> G[Mostrar error]
-    G --> Z([Fin])
-
-    F -- Sí --> H[Crear sesión de captura]
-    H --> I[Asociar usuario, campo, hoyo y cámaras]
-    I --> J[Cámaras quedan armadas]
-    J --> K[Cámara TEE analiza vídeo]
-    K --> L{¿Swing válido?}
-    L -- No --> K
-    L -- Sí --> M[Generar evento detectado]
-    M --> N[Notificar swing al backend]
-    N --> O[BACK y GREEN registran segmentos]
-    O --> P[Subir segmentos con camera_uuid, shot_id y tipo]
-    P --> Q{¿Están todos los segmentos requeridos?}
-    Q -- No --> R[Esperar segmentos restantes]
-    R --> P
-    Q -- Sí --> S[Concatenar y normalizar vídeo]
-    S --> T[Crear clip final]
-    T --> U[Asociar clip a usuario, campo y hoyo]
-    U --> V[Clip disponible en la app]
-    V --> Z([Fin])
-```
-
----
-
-## 8. Diagramas de secuencia
-
-### 8.1 CU-01 Login
-
-```mermaid
-sequenceDiagram
-    actor U as Jugador/Administrador
-    participant V as VistaLogin
-    participant C as ControladorLogin
-    participant M as Usuario
-    participant B as Backend
-    participant DB as Base de datos
-
-    U->>V: Introduce credenciales
-    V->>C: Solicita login
-    C->>B: Envía credenciales
-    B->>DB: Busca usuario
-    DB-->>B: Usuario encontrado
-    B->>M: Valida contraseña y rol
-    M-->>B: Usuario válido
-    B-->>C: Token y datos de usuario
-    C-->>V: Login correcto
-    V-->>U: Muestra vista según perfil
-```
-
-### 8.2 CU-02 Escanear código QR del hoyo
-
-```mermaid
-sequenceDiagram
-    actor J as Jugador
-    participant V as VistaEscaneoQR
-    participant C as ControladorEscanearQR
-    participant QR as CodigoQR
-    participant CAM as Camara
-    participant H as Hoyo
-    participant S as SesionCaptura
-    participant B as Backend
-    participant DB as Base de datos
-
-    J->>V: Escanea QR
-    V->>C: Envía identificador leído
-    C->>QR: Interpreta valor del QR
-    C->>B: Solicita activación de contexto
-    B->>DB: Busca cámara asociada
-    DB-->>CAM: Cámara encontrada
-    CAM-->>H: Obtiene campo y hoyo
-    B->>S: Crea sesión de captura
-    B->>DB: Guarda sesión y cámaras activas
-    B-->>C: Devuelve contexto activado
-    C-->>V: Campo, hoyo y cámaras
-    V-->>J: Muestra activación correcta
-```
-
-### 8.3 Generación automática de clip
-
-```mermaid
-sequenceDiagram
-    participant TEE as Cámara TEE
-    participant IA as ServicioDeteccionSwing
-    participant BACK as Cámara BACK
-    participant GREEN as Cámara GREEN
-    participant PROC as ServicioProcesamientoVideo
-    participant GEN as ServicioGeneracionClip
-    participant B as Backend
-    participant DB as Base de datos
-    participant FS as Almacenamiento vídeo
-
-    TEE->>IA: Envía frames de vídeo
-    IA->>IA: Analiza cuerpo y bola
-    IA-->>TEE: Swing válido detectado
-    TEE->>B: Notifica evento detectado
-    B->>BACK: Estado triggered = true
-    B->>GREEN: Estado triggered = true
-    TEE->>B: Sube segmento TEE
-    BACK->>B: Sube segmento BACK
-    GREEN->>B: Sube segmento GREEN
-    B->>PROC: Normaliza segmentos
-    PROC->>GEN: Segmentos preparados
-    GEN->>FS: Guarda clip final
-    GEN->>DB: Crea registro Clip
-    DB-->>B: Clip disponible
-```
-
-### 8.4 CU-03 Consultar y reproducir clips
-
-```mermaid
-sequenceDiagram
-    actor U as Jugador/Administrador
-    participant V as VistaListadoClips
-    participant C as ControladorConsultarClips
-    participant B as Backend
-    participant CL as Clip
-    participant DB as Base de datos
-    participant S as ServicioStreaming
-
-    U->>V: Solicita consultar clips
-    V->>C: Pide listado
-    C->>B: Solicita clips según usuario
-    B->>DB: Consulta clips accesibles
-    DB-->>B: Clips encontrados
-    B-->>V: Lista de clips
-    V-->>U: Muestra campo, hoyo, fecha y favorito
-    U->>V: Selecciona reproducir clip
-    V->>S: Solicita vídeo protegido
-    S->>CL: Comprueba permisos
-    CL-->>S: Acceso permitido
-    S-->>V: Devuelve streaming del clip
-    V-->>U: Reproduce vídeo
-```
-
-### 8.5 CU-04 Marcar / desmarcar favorito
-
-```mermaid
-sequenceDiagram
-    actor U as Jugador/Administrador
-    participant V as VistaDetalleClip
-    participant C as ControladorMarcarClipFavorito
-    participant B as Backend
-    participant CL as Clip
-    participant DB as Base de datos
-
-    U->>V: Pulsa estrella
-    V->>C: Solicita cambio de favorito
-    C->>B: Envía operación
-    B->>CL: Verifica permisos sobre clip
-    CL-->>B: Permiso válido
-    B->>CL: Cambia estado favorito
-    alt Marcado como favorito
-        CL->>CL: Elimina fecha de expiración
-    else Desmarcado como favorito
-        CL->>CL: Asigna nueva fecha de expiración
-    end
-    B->>DB: Guarda cambios
-    DB-->>B: Clip actualizado
-    B-->>V: Estado actualizado
-    V-->>U: Muestra nuevo estado
-```
-
-### 8.6 CU-09 Consultar estadísticas globales
-
-```mermaid
-sequenceDiagram
-    actor A as Administrador
-    participant V as VistaEstadisticasGlobales
-    participant C as ControladorConsultarEstadisticasGlobales
-    participant S as ServicioCalculoEstadisticas
-    participant DB as Base de datos
-
-    A->>V: Solicita estadísticas globales
-    V->>C: Pide resumen del sistema
-    C->>S: Solicita cálculo agregado
-    S->>DB: Consulta usuarios, clips, favoritos y hoyos
-    DB-->>S: Datos agregables
-    S-->>C: Estadísticas calculadas
-    C-->>V: Devuelve resultados
-    V-->>A: Muestra estadísticas globales
-```
-
----
-
-## 9. Modelo MVC de análisis
-
-El diseño separa claramente las responsabilidades:
-
-| Elemento MVC | Responsabilidad en análisis |
+| Artefacto | Archivo |
 |---|---|
-| Vista | Presenta información y recoge acciones del usuario. No contiene la lógica principal del caso de uso. |
-| Controlador | Coordina el caso de uso. Valida, aplica permisos y decide qué modelo o servicio interviene. |
-| Modelo | Representa información del dominio: Usuario, Campo, Hoyo, Cámara, Sesión, Evento y Clip. |
+| Diagrama de casos de uso | [diagramaCasosDeUso.puml](<documentacion/casos de uso/diagramaCasosDeUso.puml>) |
+| Diagrama de estados | [diagramaEstados.puml](<documentacion/modelo del dominio/diagramaEstados.puml>) |
+| Diagrama de arquitectura del sistema | [diagramaArquitecturaSistema.puml](<documentacion/diagramas generales/diagramaArquitecturaSistema.puml>) |
 
-```mermaid
-flowchart LR
-    Actor((Actor)) --> Vista[Vista]
-    Vista -->|invoca acción| Controlador[Controlador del caso de uso]
-    Controlador -->|consulta / modifica| Modelo[Modelo del dominio]
-    Controlador -->|usa| Servicio[Servicios internos]
-    Modelo --> Persistencia[(Base de datos)]
-    Servicio --> Video[(Almacenamiento / vídeo)]
-    Controlador -->|resultado| Vista
-    Vista -->|presenta información| Actor
-```
+---
 
-### 9.1 Tabla MVC por caso de uso
+## 6. Flujos de actividad de los casos de uso principales
 
-| Caso de uso | Vista asociada | Controlador | Modelo implicado |
+En esta sección se resume el flujo de éxito de los casos de uso más importantes. Estos flujos explican qué proceso debe completarse para que el caso de uso tenga éxito.
+
+### 6.1 CU-02 - Escanear código QR del hoyo
+
+| Paso | Actividad |
+|---|---|
+| 1 | El jugador inicia sesión en la aplicación móvil. |
+| 2 | El jugador selecciona la opción de escanear QR. |
+| 3 | La aplicación lee el identificador del QR. |
+| 4 | El backend valida el identificador recibido. |
+| 5 | El sistema recupera la cámara asociada al QR. |
+| 6 | A partir de la cámara, el sistema obtiene campo, hoyo y cámaras del contexto. |
+| 7 | Se crea o actualiza una sesión de captura activa. |
+| 8 | El sistema confirma al jugador que el contexto queda activado. |
+
+### 6.2 Generación automática del clip
+
+| Paso | Actividad |
+|---|---|
+| 1 | Las cámaras asociadas al hoyo capturan vídeo del entorno. |
+| 2 | El módulo de visión por computador analiza la secuencia. |
+| 3 | El sistema identifica candidatos de swing. |
+| 4 | Se valida el evento combinando movimiento corporal y detección visual de la bola. |
+| 5 | El sistema descarta movimientos previos o swings de práctica. |
+| 6 | El evento válido desencadena la generación del clip. |
+| 7 | El vídeo se recorta y se procesa en formato compatible. |
+| 8 | El clip se almacena asociado al usuario, campo, hoyo y evento. |
+| 9 | El usuario puede consultar el clip desde la aplicación móvil. |
+
+### 6.3 CU-03 - Consultar clips generados
+
+| Paso | Actividad |
+|---|---|
+| 1 | El usuario autenticado accede a la sección de clips. |
+| 2 | La aplicación solicita al backend los clips disponibles. |
+| 3 | El backend comprueba permisos según el rol del usuario. |
+| 4 | El sistema recupera los clips accesibles. |
+| 5 | La aplicación muestra la lista con información básica. |
+| 6 | El usuario puede reproducir el clip seleccionado. |
+
+---
+
+## 7. Diagramas de secuencia
+
+Los diagramas de secuencia muestran el orden temporal de interacción entre actor, aplicación móvil, backend, base de datos y servicios internos.
+
+### 7.1 Secuencias de casos de uso
+
+| Caso de uso | Archivo |
+|---|---|
+| CU-01 Login | [Login.puml](<documentacion/casos de uso/Login.puml>) |
+| CU-02 Escanear QR | [EscanearQR.puml](<documentacion/casos de uso/EscanearQR.puml>) |
+| CU-03 Consultar clips | [ConsultarClips.puml](<documentacion/casos de uso/ConsultarClips.puml>) |
+| CU-04 Marcar / desmarcar favorito | [MarcarDesmarcarFavorito.puml](<documentacion/casos de uso/MarcarDesmarcarFavorito.puml>) |
+| CU-05 Consultar estadísticas personales | [ConsultarEstadisticas.puml](<documentacion/casos de uso/ConsultarEstadisticas.puml>) |
+| CU-06 Gestionar clips | [GestionarClips.puml](<documentacion/casos de uso/GestionarClips.puml>) |
+| CU-07 Consultar usuarios | [ConsultarUsarios.puml](<documentacion/casos de uso/ConsultarUsarios.puml>) |
+| CU-08 Gestionar usuarios | [GestionarUsuarios.puml](<documentacion/casos de uso/GestionarUsuarios.puml>) |
+| CU-09 Consultar estadísticas globales | [ConsultarEstadísticasGlobales.puml](<documentacion/casos de uso/ConsultarEstadísticasGlobales.puml>) |
+
+### 7.2 Secuencias de diseño seleccionadas
+
+| Flujo de diseño | Archivo | Importancia |
+|---|---|---|
+| Activación del contexto mediante QR | [diagramaSecuenciaDiseñoQR.puml](<documentacion/secuencias diseño/diagramaSecuenciaDiseñoQR.puml>) | Explica cómo el QR activa usuario, campo, hoyo y cámaras. |
+| Generación automática del clip | [diagramaSencuenciaDiseñoClip.puml](<documentacion/secuencias diseño/diagramaSencuenciaDiseñoClip.puml>) | Explica cómo un vídeo capturado se transforma en un clip persistente. |
+
+---
+
+## 8. Modelo MVC de análisis
+
+El análisis MVC separa responsabilidades: la vista presenta y recoge acciones, el controlador coordina el caso de uso, y el modelo representa los conceptos derivados del dominio.
+
+### 8.1 Artefactos MVC
+
+| Artefacto | Archivo |
+|---|---|
+| Clases vista | [diagramaClasesVista.puml](<documentacion/MVC/diagramaClasesVista.puml>) |
+| Clases modelo | [diagramaClasesModelo.puml](<documentacion/MVC/diagramaClasesModelo.puml>) |
+| Clases controladoras por caso de uso | [diagramaClasesControladora.puml](<documentacion/MVC/diagramaClasesControladora.puml>) |
+
+### 8.2 Responsabilidades por capa
+
+| Capa | Responsabilidad | Ejemplos del sistema |
+|---|---|---|
+| Vista | Presentar información y recoger acciones del usuario | VistaLogin, VistaEscaneoQR, VistaListadoClips, VistaEstadisticas |
+| Controlador | Coordinar el caso de uso y aplicar validaciones | ControladorLogin, ControladorEscanearQR, ControladorConsultarClips |
+| Modelo | Representar entidades y relaciones del dominio | Usuario, Campo, Hoyo, Camara, SesionCaptura, EventoDetectado, Clip |
+
+### 8.3 Trazabilidad MVC por caso de uso
+
+| Caso de uso | Vista principal | Controlador | Modelo implicado |
 |---|---|---|---|
 | CU-01 Login | VistaLogin | ControladorLogin | Usuario |
-| CU-02 Escanear QR | VistaEscaneoQR | ControladorEscanearQR | Usuario, CódigoQR, Cámara, Campo, Hoyo, SesionCaptura |
-| CU-03 Consultar clips | VistaListadoClips / VistaDetalleClip | ControladorConsultarClips | Usuario, Clip, Hoyo, Campo |
+| CU-02 Escanear QR | VistaEscaneoQR | ControladorEscanearQR | Usuario, Camara, Campo, Hoyo, SesionCaptura |
+| CU-03 Consultar clips | VistaListadoClips | ControladorConsultarClipsGenerados | Usuario, Clip, Hoyo, Campo |
 | CU-04 Favorito | VistaDetalleClip | ControladorMarcarClipFavorito | Usuario, Clip |
 | CU-05 Estadísticas personales | VistaEstadisticasPersonales | ControladorConsultarEstadisticasPersonales | Usuario, Clip |
 | CU-06 Gestionar clips | VistaGestionClips | ControladorGestionarClipsRegistrados | Usuario, Clip |
@@ -552,447 +281,217 @@ flowchart LR
 | CU-08 Gestionar usuarios | VistaGestionUsuarios | ControladorGestionarUsuariosSistema | Usuario |
 | CU-09 Estadísticas globales | VistaEstadisticasGlobales | ControladorConsultarEstadisticasGlobales | Usuario, Clip |
 
-### 9.2 Servicios internos de diseño
+---
 
-| Servicio | Responsabilidad |
+## 9. Prototipos de vistas
+
+Los prototipos permiten validar la interacción antes de la implementación. En la defensa se utilizan como puente entre casos de uso, vistas MVC y pantallas reales.
+
+| Caso de uso | Vista prototipada | Función |
+|---|---|---|
+| CU-01 Login | Inicio de sesión | Introducción de credenciales y acceso al sistema. |
+| CU-02 Escanear QR | Escaneo QR | Activación del contexto de captura. |
+| CU-03 Consultar clips | Listado de clips | Consulta de vídeos generados. |
+| CU-04 Favorito | Detalle de clip | Marcado y desmarcado de favorito. |
+| CU-05 Estadísticas personales | Mis estadísticas | Consulta de resumen del jugador. |
+| CU-06 Gestionar clips | Administración de clips | Supervisión y eliminación de clips. |
+| CU-07 / CU-08 Usuarios | Administración de usuarios | Consulta y gestión de cuentas. |
+| CU-09 Estadísticas globales | Estadísticas globales | Resumen general del sistema. |
+
+---
+
+## 10. Arquitectura del sistema
+
+La arquitectura se organiza por responsabilidades. El objetivo es separar la captura, el procesamiento, la gestión del sistema, la persistencia y la presentación.
+
+### 10.1 Artefacto principal
+
+| Artefacto | Archivo |
 |---|---|
-| ServicioDeteccionSwing | Analiza vídeo y detecta un swing válido. |
-| ServicioProcesamientoVideo | Recorta, normaliza y prepara el vídeo. |
-| ServicioGeneracionClip | Coordina la creación del clip final. |
-| ServicioCalculoEstadisticas | Calcula estadísticas personales y globales. |
-| ServicioEliminacionAutomatica | Elimina clips expirados no favoritos. |
+| Diagrama de arquitectura del sistema | [diagramaArquitecturaSistema.puml](<documentacion/diagramas generales/diagramaArquitecturaSistema.puml>) |
 
----
-
-## 10. Prototipos de vistas
-
-Los prototipos permiten comprobar que cada caso de uso tiene una interfaz asociada y que la vista solo realiza tareas de presentación o invocación.
-
-### 10.1 Vistas del jugador
-
-| Vista | Caso de uso relacionado | Elementos principales |
-|---|---|---|
-| Inicio de sesión | CU-01 | Email, contraseña, botón de acceso |
-| Pantalla principal | Navegación jugador | Acceso a QR, clips y estadísticas |
-| Escaneo QR | CU-02 | Cámara móvil, área de escaneo, confirmación |
-| Mis clips | CU-03 | Listado de clips, campo, hoyo, fecha, favorito |
-| Detalle / reproducción | CU-03, CU-04 | Reproductor de vídeo, estrella de favorito |
-| Estadísticas personales | CU-05 | Total de clips, favoritos, clips por hoyo |
-
-### 10.2 Vistas del administrador
-
-| Vista | Caso de uso relacionado | Elementos principales |
-|---|---|---|
-| Panel administrador | Entrada del perfil admin | Acceso a clips, usuarios y estadísticas |
-| Clips registrados | CU-06 | Listado global, filtros, acciones de gestión |
-| Usuarios del sistema | CU-07 | Lista de usuarios registrados |
-| Gestión de usuario | CU-08 | Cambio de datos básicos y eliminación |
-| Estadísticas globales | CU-09 | Totales, clips por mes, resumen por hoyo |
-
-### 10.3 Mapa de navegación
-
-```mermaid
-flowchart TD
-    Login[Inicio de sesión] --> Perfil{Tipo de usuario}
-
-    Perfil -->|Jugador| HomeJugador[Pantalla principal jugador]
-    HomeJugador --> QR[Escanear QR]
-    HomeJugador --> Clips[Mis clips]
-    HomeJugador --> StatsP[Estadísticas personales]
-    Clips --> Detalle[Detalle / reproducción de clip]
-    Detalle --> Favorito[Marcar / desmarcar favorito]
-
-    Perfil -->|Administrador| HomeAdmin[Panel administrador]
-    HomeAdmin --> AdminClips[Gestión de clips]
-    HomeAdmin --> AdminUsers[Usuarios del sistema]
-    HomeAdmin --> AdminStats[Estadísticas globales]
-    AdminUsers --> UserDetail[Gestión de usuario]
-```
-
----
-
-## 11. Arquitectura del sistema
-
-El sistema se organiza en capas y subsistemas distribuidos.
-
-```mermaid
-flowchart TB
-    subgraph Presentacion[Aplicación móvil]
-        APP[React Native / Expo]
-        Vistas[Vistas jugador y administrador]
-    end
-
-    subgraph Servicios[Backend Django REST]
-        API[API REST]
-        Auth[Autenticación y permisos]
-        Clips[Gestión de clips]
-        QR[Activación QR]
-        Stats[Estadísticas]
-        Admin[Administración]
-    end
-
-    subgraph Procesamiento[Procesamiento de vídeo e IA]
-        Capture[Captura desde cámaras]
-        Detector[Detector YOLO + MediaPipe]
-        VideoProc[Recorte, normalización y FFmpeg]
-    end
-
-    subgraph Persistencia[Persistencia]
-        DB[(Base de datos)]
-        Media[(Archivos de vídeo)]
-    end
-
-    subgraph Campo[Campo de golf]
-        CamTEE[Cámara TEE]
-        CamBACK[Cámara BACK]
-        CamGREEN[Cámara GREEN]
-        QRfisico[Código QR]
-    end
-
-    QRfisico --> APP
-    APP --> API
-    API --> Auth
-    API --> QR
-    API --> Clips
-    API --> Stats
-    API --> Admin
-    QR --> DB
-    Clips --> DB
-    Clips --> Media
-    Stats --> DB
-    CamTEE --> Capture
-    CamBACK --> Capture
-    CamGREEN --> Capture
-    Capture --> Detector
-    Detector --> VideoProc
-    VideoProc --> API
-```
-
-### 11.1 Responsabilidades por capa
+### 10.2 Capas de la solución
 
 | Capa | Responsabilidad |
 |---|---|
-| Captura | Recibir vídeo continuo desde cámaras físicas. |
-| Procesamiento | Detectar el swing, generar segmentos y preparar vídeo final. |
-| Backend | Coordinar usuarios, sesiones, cámaras, clips, permisos y estadísticas. |
-| Persistencia | Guardar datos estructurados y referencias a vídeos. |
-| Presentación | Ofrecer la interacción móvil al jugador y al administrador. |
+| Captura | Cámaras instaladas en el campo que registran el entorno de juego. |
+| Procesamiento | Detección del swing, validación del evento y generación del clip. |
+| Servicios / backend | Gestión de usuarios, sesiones, cámaras, clips, permisos y estadísticas. |
+| Persistencia | Base de datos y almacenamiento de archivos multimedia. |
+| Presentación | Aplicación móvil para jugador y administrador. |
+
+### 10.3 Flujo arquitectónico principal
+
+| Paso | Componente | Acción |
+|---|---|---|
+| 1 | App móvil | El usuario inicia sesión. |
+| 2 | App móvil | El jugador escanea el QR del hoyo. |
+| 3 | Backend | Se asocia usuario, campo, hoyo y cámaras. |
+| 4 | Cámaras | Capturan vídeo del entorno. |
+| 5 | IA / procesamiento | Se detecta el swing válido. |
+| 6 | Backend | Se recibe y almacena el clip generado. |
+| 7 | Base de datos | Se guardan metadatos y relaciones. |
+| 8 | App móvil | El usuario consulta y reproduce el clip. |
 
 ---
 
-## 12. Modelo lógico de datos
+## 11. Modelo de datos
 
-Este apartado sigue el modelo lógico explicado en el TFG. El prototipo puede simplificar físicamente algunas tablas, pero para la defensa del proceso de diseño se presenta el modelo lógico completo.
+El modelo de datos deriva del dominio y permite persistir la información necesaria para mantener la trazabilidad del sistema.
 
-### 12.1 Entidades principales
+### 11.1 Artefacto principal
 
-| Entidad | Función |
+| Artefacto | Archivo |
 |---|---|
-| Usuario | Cuenta registrada en el sistema. |
-| Campo | Campo de golf donde se instala el sistema. |
+| Diagrama entidad-relación | [diagramaEntidadRelacion.puml](<documentacion/diagramas generales/diagramaEntidadRelacion.puml>) |
+
+### 11.2 Entidades principales del modelo lógico
+
+| Entidad | Información que representa |
+|---|---|
+| Usuario | Cuenta registrada, credenciales y tipo de usuario. |
+| Campo | Instalación deportiva. |
 | Hoyo | Unidad de juego perteneciente a un campo. |
-| Cámara | Cámara asociada a un hoyo y con rol TEE, BACK o GREEN. |
-| CódigoQR | Identificador de activación del contexto de captura. |
-| SesionCaptura | Activación de un usuario en un hoyo concreto. |
-| EventoDetectado | Swing o evento validado durante una sesión. |
-| Clip | Vídeo generado y asociado al usuario y hoyo. |
-| Estadistica | Información derivada de clips y actividad del sistema. |
+| Camara | Dispositivo asociado a un hoyo y a un rol de captura. |
+| CodigoQR | Identificador visual que activa el contexto. |
+| SesionCaptura | Asociación entre usuario, hoyo y periodo de captura. |
+| EventoDetectado | Acción deportiva identificada por el sistema. |
+| Clip | Vídeo generado y sus metadatos. |
+| Estadistica | Información agregada derivada de la actividad del sistema. |
 
-### 12.2 Diagrama entidad-relación lógico
+### 11.3 Relaciones clave
 
-```mermaid
-erDiagram
-    USUARIO ||--o{ SESION_CAPTURA : activa
-    USUARIO ||--o{ CLIP : posee
-    USUARIO ||--o{ ESTADISTICA : consulta
-
-    CAMPO ||--o{ HOYO : contiene
-    HOYO ||--o{ CAMARA : tiene
-    HOYO ||--o{ SESION_CAPTURA : contextualiza
-    HOYO ||--o{ CLIP : produce
-
-    CODIGO_QR ||--|| CAMARA : identifica
-    CAMARA ||--o{ SESION_CAPTURA : participa
-
-    SESION_CAPTURA ||--o{ EVENTO_DETECTADO : registra
-    EVENTO_DETECTADO ||--o| CLIP : genera
-    CLIP ||--o{ ESTADISTICA : alimenta
-
-    USUARIO {
-        int id_usuario PK
-        string nombre_usuario
-        string email
-        string contrasena_hash
-        string tipo_usuario
-    }
-
-    CAMPO {
-        int id_campo PK
-        string nombre
-        string ubicacion
-    }
-
-    HOYO {
-        int id_hoyo PK
-        int id_campo FK
-        int numero
-        int par
-        float distancia
-    }
-
-    CAMARA {
-        int id_camara PK
-        int id_hoyo FK
-        string uuid
-        string rol
-        boolean activa
-    }
-
-    CODIGO_QR {
-        int id_qr PK
-        string valor
-        int id_camara FK
-    }
-
-    SESION_CAPTURA {
-        int id_sesion PK
-        int id_usuario FK
-        int id_hoyo FK
-        datetime fecha_inicio
-        datetime fecha_fin
-        string estado
-    }
-
-    EVENTO_DETECTADO {
-        int id_evento PK
-        int id_sesion FK
-        datetime fecha_hora
-        string tipo
-        boolean valido
-    }
-
-    CLIP {
-        int id_clip PK
-        int id_usuario FK
-        int id_hoyo FK
-        int id_evento FK
-        string archivo
-        datetime fecha_creacion
-        boolean favorito
-        datetime fecha_expiracion
-    }
-
-    ESTADISTICA {
-        int id_estadistica PK
-        int id_usuario FK
-        string tipo
-        float valor
-        datetime fecha_calculo
-    }
-```
-
-### 12.3 Reglas de datos importantes
-
-| Regla | Justificación |
+| Relación | Significado |
 |---|---|
-| Un campo contiene varios hoyos | Representa la estructura real del campo de golf. |
-| Un hoyo puede tener varias cámaras | Permite captura multicámara. |
-| Una sesión pertenece a un usuario y a un hoyo | Mantiene el contexto de captura. |
-| Un evento puede generar cero o un clip | Solo los eventos válidos producen vídeo final. |
-| Un clip pertenece a un usuario y a un hoyo | Permite consulta personal y trazabilidad. |
-| Los clips no favoritos expiran | Evita crecimiento indefinido del almacenamiento. |
-| Las estadísticas se derivan de clips y usuarios | No duplican información innecesaria. |
+| Campo 1 - N Hoyo | Un campo contiene varios hoyos. |
+| Hoyo 1 - N Camara | Un hoyo puede tener varias cámaras asociadas. |
+| Usuario 1 - N SesionCaptura | Un usuario puede activar varias sesiones. |
+| SesionCaptura 1 - N EventoDetectado | Una sesión puede producir eventos candidatos o válidos. |
+| EventoDetectado 1 - 0..1 Clip | Un evento válido puede generar un clip. |
+| Usuario 1 - N Clip | Cada clip pertenece a un usuario. |
+| Hoyo 1 - N Clip | Cada clip queda contextualizado en un hoyo. |
 
 ---
 
-## 13. Modelo de despliegue
+## 12. Modelo de despliegue
 
-El despliegue refleja la distribución física y lógica de los componentes.
+El modelo de despliegue muestra dónde se ejecutan los componentes físicos y lógicos de la solución.
 
-```mermaid
-flowchart LR
-    subgraph CampoGolf[Campo de golf]
-        TEE[Cámara TEE]
-        BACK[Cámara BACK]
-        GREEN[Cámara GREEN]
-        QR[QR físico del hoyo]
-        SWITCH[Switch / red local]
-    end
+### 12.1 Artefactos generales
 
-    subgraph NodoIA[Equipo de captura y procesamiento]
-        Python[Python + OpenCV]
-        YOLO[YOLO]
-        MP[MediaPipe]
-        FFMPEG[FFmpeg]
-    end
-
-    subgraph Servidor[Servidor backend]
-        Django[Django REST API]
-        Media[Almacenamiento multimedia]
-        DB[(Base de datos)]
-    end
-
-    subgraph Cliente[Dispositivo móvil]
-        Mobile[App Expo / React Native]
-    end
-
-    TEE --> SWITCH
-    BACK --> SWITCH
-    GREEN --> SWITCH
-    SWITCH --> Python
-    Python --> YOLO
-    Python --> MP
-    Python --> FFMPEG
-    Python -->|segmentos / clip| Django
-    Django --> DB
-    Django --> Media
-    Mobile -->|login, QR, consulta| Django
-    QR --> Mobile
-```
-
----
-
-## 14. Organización del código
-
-El repositorio se organiza por subsistemas, manteniendo separación entre IA, backend y aplicación móvil.
-
-```text
-Golf_proyect/
-├── golf/                         # Módulo de visión por computador e IA
-│   ├── src/
-│   │   ├── swing_capture.py       # Punto de entrada del procesamiento
-│   │   ├── config.py              # Configuración CLI / variables de entorno
-│   │   ├── detector.py            # Detección de swing con YOLO + MediaPipe
-│   │   ├── pipeline_live.py       # Flujo en vivo multicámara
-│   │   ├── pipeline_backend.py    # Procesamiento offline de vídeos
-│   │   ├── video_io.py            # Escritura y utilidades de vídeo
-│   │   └── uploader.py            # Subida de segmentos al backend
-│   └── runs/detect/train/weights/ # Pesos entrenados del modelo YOLO
-│
-├── golf_backend/                  # Backend Django REST
-│   ├── clips/
-│   │   ├── models.py              # Modelos Clip, Camera, QRSession, ShotEvent
-│   │   ├── serializers.py         # Serialización de datos para API
-│   │   ├── urls.py                # Rutas del módulo clips
-│   │   └── views/
-│   │       ├── qr.py              # Activación por QR y notificación de swing
-│   │       ├── cameras.py         # Estado de cámaras
-│   │       ├── upload.py          # Subida, reparación y composición de clips
-│   │       ├── clips_list.py      # Consulta de clips
-│   │       ├── clips_stream.py    # Streaming protegido de vídeo
-│   │       ├── clips_admin.py     # Favoritos y administración de clips
-│   │       └── clips_stats.py     # Estadísticas personales y globales
-│   └── users/                     # Autenticación y gestión de usuarios
-│
-└── golf_mobile/                   # Aplicación móvil
-    ├── screens/                   # Pantallas jugador y administrador
-    ├── components/                # Componentes reutilizables
-    ├── navigation/                # Navegación de la app
-    └── utils/                     # API, configuración, JWT y subida
-```
-
-### 14.1 Correspondencia diseño - código
-
-| Diseño | Implementación principal |
+| Artefacto | Archivo |
 |---|---|
-| VistaLogin | `golf_mobile/screens/LoginScreen.js` |
-| VistaEscaneoQR | `golf_mobile/screens/ScanQrScreen.js` |
-| VistaListadoClips | `golf_mobile/screens/HomeScreen.js`, `components/ClipCard.js` |
-| VistaDetalleClip | `VideoPlayer.js`, componentes de clip |
-| ControladorEscanearQR | `golf_backend/clips/views/qr.py` |
-| ServicioDeteccionSwing | `golf/src/detector.py` |
-| ServicioProcesamientoVideo | `golf/src/pipeline_live.py`, `pipeline_backend.py`, `video_io.py` |
-| ServicioGeneracionClip | `golf_backend/clips/views/upload.py` |
-| ServicioCalculoEstadisticas | `golf_backend/clips/views/clips_stats.py` |
-| Streaming de clips | `golf_backend/clips/views/clips_stream.py` |
+| Diagrama de despliegue | [diagramaDespliegue.puml](<documentacion/diagramas generales/diagramaDespliegue.puml>) |
+| Diagrama de paquetes | [diagramaPaquetes.puml](<documentacion/diagramas generales/diagramaPaquetes.puml>) |
 
-### 14.2 Flujo técnico implementado
+### 12.2 Nodos principales
 
-```mermaid
-flowchart TD
-    A[ScanQrScreen] -->|camera_uuid| B[QRScanView]
-    B --> C[Crear ShotEvent en estado ARMED]
-    C --> D[Activar cámaras del campo/hoyo]
-    D --> E[pipeline_live.py consulta CameraStatusView]
-    E --> F{Rol cámara}
-    F -->|TEE| G[Detector YOLO + MediaPipe]
-    F -->|BACK / GREEN| H[Espera triggered]
-    G --> I[SwingDetectionNotifyView]
-    I --> J[ShotEvent pasa a TRIGGERED]
-    J --> H
-    G --> K[Sube segmento TEE]
-    H --> L[Sube segmento BACK/GREEN]
-    K --> M[ClipUploadView]
-    L --> M
-    M --> N{¿TEE + BACK + GREEN?}
-    N -->|No| O[Esperar segmento]
-    N -->|Sí| P[FFmpeg concatena y normaliza]
-    P --> Q[Crear Clip]
-    Q --> R[HomeScreen muestra clip]
-```
+| Nodo | Responsabilidad |
+|---|---|
+| Cámaras IP | Capturan vídeo del tee, zona posterior o green. |
+| Red local | Comunica cámaras, equipo de procesamiento y backend. |
+| Equipo de procesamiento | Ejecuta el módulo de visión por computador. |
+| Servidor backend | Expone la API y coordina la lógica de negocio. |
+| Base de datos | Conserva usuarios, cámaras, sesiones, clips y relaciones. |
+| Almacenamiento multimedia | Guarda los archivos de vídeo generados. |
+| Dispositivo móvil | Permite al usuario interactuar con el sistema. |
 
 ---
 
-## 15. Trazabilidad entre requisitos, diseño e implementación
+## 13. Organización del código
 
-La trazabilidad permite demostrar que cada parte del diseño tiene relación con los requisitos y con el código final.
+La implementación se divide en tres bloques principales: IA/captura, backend y aplicación móvil.
 
-| Requisito / bloque | Caso de uso | Elemento de diseño | Implementación |
-|---|---|---|---|
-| RF-01 Identificar usuario | CU-01 Login | Usuario, ControladorLogin | Backend auth + app móvil login |
-| RF-02 Activar por QR | CU-02 Escanear QR | CódigoQR, Cámara, SesionCaptura | `qr.py`, `CameraStatusView` |
-| RF-03 Asociar usuario, campo y hoyo | CU-02 | Usuario, Campo, Hoyo, SesionCaptura | `QRScanView`, modelos de backend |
-| RF-05 Detectar swing | Flujo de captura | ServicioDeteccionSwing | `detector.py`, `pipeline_live.py` |
-| RF-07 Validar movimiento y bola | Flujo de captura | EventoDetectado | YOLO + MediaPipe |
-| RF-08 Generar clip | Generación automática | ServicioProcesamientoVideo | `pipeline_live.py`, `upload.py` |
-| RF-10 Formato compatible | Generación automática | ServicioProcesamientoVideo | FFmpeg H.264 / MP4 |
-| RF-11 Asociar clip | CU-03 / generación | Clip | `ClipUploadView`, modelo Clip |
-| RF-15 Consultar clips propios | CU-03 | ControladorConsultarClips | `clips_list.py` |
-| RF-16 Reproducir clip | CU-03 | VistaDetalleClip, Clip | `clips_stream.py`, `VideoPlayer.js` |
-| RF-18 / RF-19 Favoritos | CU-04 | Clip | `ClipFavoriteView` |
-| RF-23 Estadísticas personales | CU-05 | ServicioCalculoEstadisticas | `clips_stats.py` |
-| RF-24 Estadísticas globales | CU-09 | ServicioCalculoEstadisticas | `clips_stats.py` |
-| RF-25 Gestión admin | CU-06, CU-07, CU-08 | Controladores admin | vistas admin + backend users/clips |
+### 13.1 Módulo de IA y captura
+
+| Archivo | Responsabilidad |
+|---|---|
+| [swing_capture.py](<golf/src/swing_capture.py>) | Punto de entrada del módulo de captura y procesamiento. |
+| [config.py](<golf/src/config.py>) | Construcción de configuración mediante argumentos y variables de entorno. |
+| [detector.py](<golf/src/detector.py>) | Detección del swing combinando pose y bola. |
+| [pipeline_live.py](<golf/src/pipeline_live.py>) | Captura en vivo, activación por cámara y subida de segmentos. |
+| [pipeline_backend.py](<golf/src/pipeline_backend.py>) | Procesamiento offline de vídeos subidos. |
+| [video_io.py](<golf/src/video_io.py>) | Escritura de clips y utilidades de vídeo. |
+| [uploader.py](<golf/src/uploader.py>) | Subida de clips o segmentos al backend. |
+
+### 13.2 Backend
+
+| Archivo | Responsabilidad |
+|---|---|
+| [qr.py](<golf_backend/clips/views/qr.py>) | Escaneo QR, activación de sesión y notificación de swing. |
+| [cameras.py](<golf_backend/clips/views/cameras.py>) | Estado de cámaras y sesión activa. |
+| [upload.py](<golf_backend/clips/views/upload.py>) | Recepción, reparación, procesamiento y almacenamiento de clips. |
+| [clips_list.py](<golf_backend/clips/views/clips_list.py>) | Consulta de clips por usuario y permisos. |
+| [clips_stream.py](<golf_backend/clips/views/clips_stream.py>) | Streaming de vídeo con control de acceso. |
+| [clips_admin.py](<golf_backend/clips/views/clips_admin.py>) | Favoritos y administración de clips. |
+| [clips_stats.py](<golf_backend/clips/views/clips_stats.py>) | Estadísticas personales y globales. |
+| [validators.py](<golf_backend/clips/views/validators.py>) | Validación de identificadores como camera_uuid. |
+| [utils.py](<golf_backend/clips/views/utils.py>) | Utilidades de FFmpeg, parsing y concatenación. |
+
+### 13.3 Aplicación móvil
+
+| Archivo | Responsabilidad |
+|---|---|
+| [App.js](<golf_mobile/App.js>) | Entrada principal de la app. |
+| [AuthContext.js](<golf_mobile/AuthContext.js>) | Gestión del estado de autenticación. |
+| [navigation/DrawerNavigator.js](<golf_mobile/navigation/DrawerNavigator.js>) | Navegación principal. |
+| [screens/ScanQrScreen.js](<golf_mobile/screens/ScanQrScreen.js>) | Escaneo del QR del hoyo. |
+| [screens/HomeScreen.js](<golf_mobile/screens/HomeScreen.js>) | Listado principal de clips del jugador. |
+| [screens/StatsScreen.js](<golf_mobile/screens/StatsScreen.js>) | Estadísticas personales. |
+| [screens/AdminClipsScreen.js](<golf_mobile/screens/AdminClipsScreen.js>) | Gestión de clips por administrador. |
+| [components/ClipCard.js](<golf_mobile/components/ClipCard.js>) | Tarjeta visual de cada clip. |
+| [VideoPlayer.js](<golf_mobile/VideoPlayer.js>) | Reproducción de clips. |
+| [utils/api.js](<golf_mobile/utils/api.js>) | Comunicación HTTP con el backend. |
 
 ---
 
-## 16. Validación y cierre
+## 14. Relación entre diseño e implementación
 
-### 16.1 Qué se valida
+La implementación conserva la separación conceptual planteada en el diseño, aunque algunos elementos del modelo lógico pueden simplificarse en el prototipo.
+
+| Diseño | Implementación |
+|---|---|
+| Usuario | Modelo de usuario y control de permisos en backend. |
+| Campo / Hoyo | Metadatos asociados a cámaras, sesiones y clips. |
+| Cámara | Registro con UUID, rol y contexto de captura. |
+| Código QR | Mecanismo de entrada que contiene el identificador de cámara. |
+| Sesión de captura | Activación temporal del contexto de usuario y hoyo. |
+| Evento detectado | Estado lógico del golpe y activación del flujo multicámara. |
+| Clip | Registro persistente con archivo de vídeo y metadatos. |
+| Estadísticas | Cálculo dinámico a partir de clips y usuarios. |
+
+---
+
+## 15. Validación del prototipo
+
+La validación comprueba que el sistema cumple el flujo funcional definido en los requisitos.
 
 | Aspecto validado | Resultado esperado |
 |---|---|
-| Login | El usuario accede con su perfil correspondiente. |
+| Inicio de sesión | El usuario accede con permisos adecuados. |
 | Escaneo QR | El sistema identifica campo, hoyo y cámaras. |
-| Activación de cámaras | Las cámaras quedan asociadas al usuario y al golpe activo. |
-| Detección del swing | El sistema detecta un golpe válido y descarta movimientos no válidos. |
-| Generación de clip | El clip se genera automáticamente tras el evento. |
-| Asociación del clip | El vídeo queda asociado a usuario, campo y hoyo. |
-| Consulta móvil | El usuario puede ver y reproducir sus clips. |
-| Favoritos | Los clips favoritos se conservan y no expiran. |
-| Administración | El administrador consulta clips, usuarios y estadísticas globales. |
-
-### 16.2 Conclusión del proceso de ingeniería
-
-El proyecto demuestra un proceso completo de ingeniería de software:
-
-```text
-Problema real
-   -> Modelo del dominio
-   -> Requisitos funcionales y suplementarios
-   -> Casos de uso
-   -> Análisis MVC
-   -> Arquitectura distribuida
-   -> Modelo lógico de datos
-   -> Diseño de módulos
-   -> Implementación
-   -> Validación funcional
-```
-
-La contribución principal no es únicamente la aplicación final, sino la integración coherente entre análisis, diseño e implementación para automatizar la captura de golpes de golf mediante visión por computador y arquitectura distribuida.
+| Activación de cámaras | Las cámaras quedan vinculadas a la sesión activa. |
+| Detección del swing | El sistema identifica el golpe válido. |
+| Generación del clip | El vídeo resultante incluye el golpe y queda almacenado. |
+| Consulta desde app | El usuario visualiza sus clips. |
+| Favoritos | El usuario conserva clips relevantes. |
+| Administración | El administrador consulta usuarios, clips y estadísticas. |
 
 ---
 
-## Resumen final de la defensa
+## 16. Cierre
 
-El sistema parte de una necesidad clara: registrar golpes de golf sin intervención manual. Para resolverla se diseña un dominio basado en usuarios, campos, hoyos, cámaras, sesiones, eventos y clips. A partir de ese dominio se derivan requisitos, casos de uso y controladores MVC. La arquitectura separa aplicación móvil, backend, procesamiento de vídeo, cámaras y almacenamiento. Finalmente, la implementación materializa ese diseño en módulos diferenciados de IA, backend y app móvil, manteniendo trazabilidad entre lo especificado y lo construido.
+El proyecto demuestra un proceso completo de ingeniería de software aplicado a un sistema distribuido con visión por computador:
+
+| Fase | Resultado obtenido |
+|---|---|
+| Dominio | Identificación de entidades del problema deportivo. |
+| Requisitos | Definición de funcionalidades y restricciones. |
+| Casos de uso | Descripción de interacción entre actores y sistema. |
+| MVC | Separación entre vistas, controladores y modelos. |
+| Arquitectura | Diseño distribuido por capas y responsabilidades. |
+| Datos | Modelo lógico para conservar trazabilidad. |
+| Implementación | Prototipo funcional con IA, backend y app móvil. |
+| Validación | Comprobación del flujo completo de captura y consulta. |
+
+**Conclusión:** el sistema transforma un golpe de golf real en un clip digital trazable, asociado al usuario y al hoyo, generado automáticamente y disponible para su consulta posterior.
