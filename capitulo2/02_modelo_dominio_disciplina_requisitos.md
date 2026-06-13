@@ -113,20 +113,6 @@ Los requisitos funcionales describen las acciones que debe permitir el sistema, 
 | RF-17  | El sistema deberá permitir a los administradores consultar usuarios, clips y estadísticas globales.                                  |
 | RF-18  | El sistema deberá permitir a los administradores realizar operaciones básicas de gestión sobre usuarios y clips.                     |
 
-## Requisitos suplementarios
-
-| Categoría      | Requisito                                                                                                                    |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Seguridad      | El acceso a clips y estadísticas deberá estar restringido a usuarios autenticados y autorizados.                             |
-| Seguridad      | Un jugador no deberá poder consultar clips ni estadísticas de otros usuarios.                                                |
-| Seguridad      | Las estadísticas globales y la gestión de usuarios deberán estar disponibles solo para administradores.                      |
-| Rendimiento    | El sistema deberá generar y dejar disponible el clip en un tiempo aceptable tras detectar un golpe válido.                   |
-| Fiabilidad     | El sistema deberá minimizar la generación de clips derivados de movimientos que no correspondan a un golpe real.             |
-| Fiabilidad     | El sistema deberá conservar correctamente la asociación entre usuario, campo, hoyo, cámara y clip.                           |
-| Disponibilidad | El sistema deberá detectar errores de cámara, procesamiento o almacenamiento sin generar registros incompletos.              |
-| Mantenibilidad | La solución deberá organizarse de forma modular, separando captura, procesamiento, backend, persistencia y aplicación móvil. |
-| Portabilidad   | La arquitectura deberá permitir futuras ampliaciones con nuevas cámaras, hoyos o sistemas de almacenamiento.                 |
-| Usabilidad     | La aplicación móvil deberá ofrecer una interacción sencilla para escanear QR, consultar clips y reproducir vídeos.           |
 
 ## Actores
 
