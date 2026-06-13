@@ -35,7 +35,7 @@ Los componentes principales son:
 | Almacenamiento multimedia | Conserva los ficheros de vídeo generados para su reproducción posterior.                                                             |
 
 
-[Diagrama Arquitectura del sistema](../documentacion/imagenes/arquitecturalDelSistema.svg) |
+![Diagrama de arquitectura del sistema](../documentacion/imagenes/arquitecturaDelSistema.svg)
 
 La arquitectura separa las responsabilidades del sistema en capas diferenciadas. La aplicación móvil actúa como interfaz de usuario, el backend concentra la lógica de negocio, el módulo de procesamiento ejecuta la detección y generación de clips, y la base de datos junto con el almacenamiento multimedia conservan la información necesaria.
 
@@ -109,7 +109,7 @@ Para representar el comportamiento interno de los flujos más relevantes se han 
 ### Escaneo del código QR
 
 
- [Diagrama secuencia QR](../documentacion/imagenes/secuenciaQR.svg) |
+![Diagrama de secuencia - Escaneo QR](../documentacion/imagenes/secuenciaQR.svg)
 
 Este diagrama representa el proceso de activación del contexto de captura. El jugador escanea el código QR desde la aplicación móvil y el sistema utiliza el identificador recibido para localizar la cámara asociada. A partir de esa cámara se obtiene el campo, el hoyo y el rol de captura correspondiente.
 
@@ -118,7 +118,7 @@ El resultado del flujo es la creación o actualización de una sesión activa, q
 ### Generación automática del clip
 
 
-[Diagrama secuencia clip](../documentacion/imagenes/secuenciaClip.svg) |
+![Diagrama de secuencia - Generación automática de clip(../documentacion/imagenes/secuenciaClip.svg)
 
 Este diagrama representa el proceso interno de generación de un clip. La cámara proporciona la secuencia de vídeo al módulo de detección, que analiza el movimiento del jugador y la información visual de la bola.
 
@@ -133,7 +133,7 @@ El sistema se organiza en tres grupos principales de clases: modelo, vista y con
 ### Clases modelo
 
 
-[Diagrama clases modelo](../documentacion/imagenes/clasesModelo.svg) |
+![Diagrama de clases modelo](../documentacion/imagenes/clasesModelo.svg)
 
 Las clases modelo representan los conceptos principales sobre los que opera el sistema.
 
@@ -154,7 +154,7 @@ Estas clases forman la base conceptual del sistema y permiten mantener la trazab
 ### Clases vista
 
 
-[Diagrama clases vista](../documentacion/imagenes/vista.svg) |
+![Diagrama de clases vista](../documentacion/imagenes/vista.svg)
 
 Las clases vista representan los puntos de interacción entre el usuario y el sistema. Su responsabilidad es mostrar información y recoger acciones, sin contener la lógica principal de negocio.
 
@@ -174,7 +174,7 @@ Entre las vistas principales se encuentran:
 ### Clases controladoras
 
 
- [Diagrama clases controladoras](../documentacion/imagenes/controladora.svg) |
+![Diagrama de clases controladoras](../documentacion/imagenes/controladora.svg)
 
 Las clases controladoras coordinan la ejecución de los casos de uso. Actúan como intermediarias entre las vistas, las clases modelo y los servicios internos.
 
@@ -213,7 +213,7 @@ Estos servicios permiten separar la lógica técnica de procesamiento y mantenim
 ## Diseño de paquetes
 
 
-[Diagrama paquetes](../documentacion/imagenes/paquetes.svg) |
+![Diagrama de paquetes](../documentacion/imagenes/paquetes.svg)
 
 El sistema se organiza en paquetes funcionales para mantener una estructura modular.
 
@@ -235,7 +235,7 @@ La organización por paquetes permite reducir el acoplamiento entre componentes 
 ## Modelo lógico de la base de datos
 
 
-[Diagrama entidad relacion](../documentacion/imagenes/entidadRelacion.svg) |
+![Diagrama entidad-relación](../documentacion/imagenes/entidadRelacion.svg)
 
 El modelo lógico de la base de datos define las entidades persistentes necesarias para soportar el funcionamiento del sistema.
 
@@ -275,7 +275,7 @@ Esta simplificación permite reducir la complejidad del prototipo sin perder la 
 ## Modelo de despliegue
 
 
-[Diagrama despliegue](../documentacion/imagenes/diagramaDespliegue.svg) |
+![Diagrama de despliegue](../documentacion/imagenes/diagramaDespliegue.svg)
 
 El modelo de despliegue representa la distribución física y lógica de los componentes del sistema.
 
