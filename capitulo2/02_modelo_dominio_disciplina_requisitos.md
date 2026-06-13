@@ -67,11 +67,10 @@ En este proyecto, la especificación de requisitos se centra en el flujo complet
 
 ## Requisitos del sistema
 
-Los requisitos del sistema se dividen en requisitos funcionales y requisitos suplementarios.
-
-Los requisitos funcionales describen las acciones que debe permitir el sistema, mientras que los requisitos suplementarios establecen condiciones de calidad relacionadas con seguridad, rendimiento, disponibilidad, mantenibilidad y usabilidad.
 
 ## Requisitos funcionales
+
+No estan todos los requisitos del sistema
 
 | Código | Requisito funcional                                                                                                                  |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------ |
