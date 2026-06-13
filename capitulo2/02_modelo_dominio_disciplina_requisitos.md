@@ -58,9 +58,7 @@ De esta forma, el sistema puede mantener la trazabilidad entre el jugador, el ca
 
 ## Diagrama de objetos
 
-| Diagrama                                                          | Código fuente                                                                    |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ![Diagrama de objetos](../recursos/diagramas/diagramaObjetos.png) | [Ver código del diagrama de objetos](../recursos/diagramas/diagramaObjetos.puml) |
+![Diagrama de objetos](../recursos/diagramas/diagramaObjetos.png)
 
 El diagrama de objetos muestra un ejemplo concreto del funcionamiento del sistema en un momento determinado.
 
@@ -70,9 +68,7 @@ Este diagrama ayuda a comprender cómo se materializan las clases del dominio en
 
 ## Diagrama de estados
 
-| Diagrama                                                          | Código fuente                                                                    |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ![Diagrama de estados](../recursos/diagramas/diagramaEstados.png) | [Ver código del diagrama de estados](../recursos/diagramas/diagramaEstados.puml) |
+![Diagrama de estados](../recursos/diagramas/diagramaEstados.png) 
 
 El diagrama de estados representa el ciclo de vida del clip dentro del sistema.
 
@@ -134,9 +130,8 @@ Los requisitos funcionales describen las acciones que debe permitir el sistema, 
 
 ## Actores
 
-| Diagrama                                                                    | Código fuente                                                                             |
-| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![Jerarquía de actores](../recursos/diagramas/diagramaJerarquiaActores.png) | [Ver código de jerarquía de actores](../recursos/diagramas/diagramaJerarquiaActores.puml) |
+
+![Jerarquía de actores](../recursos/diagramas/diagramaJerarquiaActores.png)
 
 En el sistema se identifican dos actores principales: el **Jugador** y el **Administrador**.
 
@@ -148,9 +143,8 @@ Ambos actores comparten la condición de usuarios autenticados, pero se diferenc
 
 ## Casos de uso por actor
 
-| Diagrama                                                                  | Código fuente                                                                            |
-| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| ![Diagrama de casos de uso](../recursos/diagramas/diagramaCasosDeUso.png) | [Ver código del diagrama de casos de uso](../recursos/diagramas/diagramaCasosDeUso.puml) |
+
+![Diagrama de casos de uso](../recursos/diagramas/diagramaCasosDeUso.png)
 
 Los casos de uso identificados representan las funcionalidades principales del sistema desde el punto de vista de los actores.
 
@@ -211,9 +205,8 @@ Los casos de uso de prioridad alta corresponden al flujo esencial del sistema: a
 
 ### CU-01 - Login
 
-| Diagrama                                              | Código fuente                                                        |
-| ----------------------------------------------------- | -------------------------------------------------------------------- |
-| ![Caso de uso Login](../recursos/diagramas/Login.png) | [Ver código del caso de uso Login](../recursos/diagramas/Login.puml) |
+
+![Caso de uso Login](../recursos/diagramas/Login.png) 
 
 **Actor principal:** Jugador / Administrador.
 
@@ -237,9 +230,8 @@ El usuario accede correctamente a la aplicación y se aplican los permisos asoci
 
 ### CU-02 - Escanear código QR del hoyo
 
-| Diagrama                                                         | Código fuente                                                                   |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| ![Caso de uso Escanear QR](../recursos/diagramas/EscanearQR.png) | [Ver código del caso de uso Escanear QR](../recursos/diagramas/EscanearQR.puml) |
+
+![Caso de uso Escanear QR](../recursos/diagramas/EscanearQR.png) 
 
 **Actor principal:** Jugador.
 
@@ -264,9 +256,8 @@ El sistema crea una sesión activa y asocia el usuario al campo, hoyo y cámaras
 
 ### CU-03 - Consultar clips generados
 
-| Diagrama                                                                 | Código fuente                                                                           |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| ![Caso de uso Consultar clips](../recursos/diagramas/ConsultarClips.png) | [Ver código del caso de uso Consultar clips](../recursos/diagramas/ConsultarClips.puml) |
+
+![Caso de uso Consultar clips](../recursos/diagramas/ConsultarClips.png)
 
 **Actor principal:** Jugador / Administrador.
 
@@ -290,9 +281,8 @@ El sistema muestra una lista de clips disponibles con información básica como 
 
 ### CU-04 - Marcar/Desmarcar clip como favorito
 
-| Diagrama                                                                          | Código fuente                                                                                    |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| ![Caso de uso Marcar favorito](../recursos/diagramas/MarcarDesmarcarFavorito.png) | [Ver código del caso de uso Marcar favorito](../recursos/diagramas/MarcarDesmarcarFavorito.puml) |
+
+![Caso de uso Marcar favorito](../recursos/diagramas/MarcarDesmarcarFavorito.png) 
 
 **Actor principal:** Jugador / Administrador.
 
@@ -316,9 +306,8 @@ El sistema actualiza correctamente el estado de favorito del clip.
 
 ### CU-05 - Consultar estadísticas personales
 
-| Diagrama                                                                                | Código fuente                                                                                          |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| ![Caso de uso Estadísticas personales](../recursos/diagramas/ConsultarEstadisticas.png) | [Ver código del caso de uso Estadísticas personales](../recursos/diagramas/ConsultarEstadisticas.puml) |
+
+![Caso de uso Estadísticas personales](../recursos/diagramas/ConsultarEstadisticas.png) 
 
 **Actor principal:** Jugador.
 
@@ -341,9 +330,8 @@ El sistema muestra estadísticas correspondientes únicamente al usuario autenti
 
 ### CU-06 - Gestionar clips registrados
 
-| Diagrama                                                                 | Código fuente                                                                           |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| ![Caso de uso Gestionar clips](../recursos/diagramas/GestionarClips.png) | [Ver código del caso de uso Gestionar clips](../recursos/diagramas/GestionarClips.puml) |
+
+![Caso de uso Gestionar clips](../recursos/diagramas/GestionarClips.png)
 
 **Actor principal:** Administrador.
 
@@ -367,9 +355,8 @@ El sistema permite aplicar operaciones de gestión sobre los clips disponibles.
 
 ### CU-07 - Consultar usuarios del sistema
 
-| Diagrama                                                                      | Código fuente                                                                                |
-| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| ![Caso de uso Consultar usuarios](../recursos/diagramas/ConsultarUsarios.png) | [Ver código del caso de uso Consultar usuarios](../recursos/diagramas/ConsultarUsarios.puml) |
+
+![Caso de uso Consultar usuarios](../recursos/diagramas/ConsultarUsarios.png)
 
 **Actor principal:** Administrador.
 
@@ -392,9 +379,8 @@ El sistema muestra la lista de usuarios registrados con información básica.
 
 ### CU-08 - Gestionar usuarios del sistema
 
-| Diagrama                                                                       | Código fuente                                                                                 |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| ![Caso de uso Gestionar usuarios](../recursos/diagramas/GestionarUsuarios.png) | [Ver código del caso de uso Gestionar usuarios](../recursos/diagramas/GestionarUsuarios.puml) |
+
+![Caso de uso Gestionar usuarios](../recursos/diagramas/GestionarUsuarios.png) 
 
 **Actor principal:** Administrador.
 
@@ -418,9 +404,8 @@ El sistema aplica la operación solicitada sobre la cuenta seleccionada.
 
 ### CU-09 - Consultar estadísticas globales del sistema
 
-| Diagrama                                                                                      | Código fuente                                                                                                |
-| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| ![Caso de uso Estadísticas globales](../recursos/diagramas/ConsultarEstadísticasGlobales.png) | [Ver código del caso de uso Estadísticas globales](../recursos/diagramas/ConsultarEstadísticasGlobales.puml) |
+
+![Caso de uso Estadísticas globales](../recursos/diagramas/ConsultarEstadísticasGlobales.png)
 
 **Actor principal:** Administrador.
 
