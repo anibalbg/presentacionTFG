@@ -67,8 +67,6 @@ La disciplina de requisitos permite definir qué debe hacer el sistema, quién i
 
 En este proyecto, la especificación de requisitos se centra en el flujo completo del sistema: autenticación del usuario, activación del contexto de captura mediante código QR, detección automática del swing, generación de clips, consulta del contenido generado y funciones de administración.
 
-## Requisitos del sistema
-
 
 ## Requisitos funcionales
 
