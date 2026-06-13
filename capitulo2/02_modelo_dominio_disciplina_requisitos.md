@@ -114,26 +114,6 @@ Ambos actores comparten la condición de usuarios autenticados, pero se diferenc
 
 Los casos de uso identificados representan las funcionalidades principales del sistema desde el punto de vista de los actores.
 
-### Casos de uso asociados al Jugador
-
-| Código | Caso de uso                         | Descripción                                                                 |
-| ------ | ----------------------------------- | --------------------------------------------------------------------------- |
-| CU-01  | Login                               | Permite acceder al sistema mediante credenciales.                           |
-| CU-02  | Escanear código QR del hoyo         | Permite activar el contexto de captura asociado a un campo y hoyo concreto. |
-| CU-03  | Consultar clips generados           | Permite visualizar y reproducir los clips asociados al usuario.             |
-| CU-04  | Marcar/Desmarcar clip como favorito | Permite conservar clips relevantes y evitar su eliminación automática.      |
-| CU-05  | Consultar estadísticas personales   | Permite consultar información resumida de la actividad del jugador.         |
-
-### Casos de uso asociados al Administrador
-
-| Código | Caso de uso                                 | Descripción                                                            |
-| ------ | ------------------------------------------- | ---------------------------------------------------------------------- |
-| CU-01  | Login                                       | Permite acceder al sistema mediante credenciales de administrador.     |
-| CU-03  | Consultar clips generados                   | Permite consultar clips registrados en el sistema.                     |
-| CU-06  | Gestionar clips registrados                 | Permite realizar operaciones de gestión sobre los clips almacenados.   |
-| CU-07  | Consultar usuarios del sistema              | Permite visualizar los usuarios registrados.                           |
-| CU-08  | Gestionar usuarios del sistema              | Permite modificar información básica de usuarios o eliminar cuentas.   |
-| CU-09  | Consultar estadísticas globales del sistema | Permite consultar información agregada del funcionamiento del sistema. |
 
 ## Relación entre casos de uso y requisitos funcionales
 
