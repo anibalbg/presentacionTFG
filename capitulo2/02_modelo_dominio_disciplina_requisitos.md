@@ -4,10 +4,9 @@
 
 El modelo del dominio permite representar los conceptos principales que forman parte del sistema y las relaciones existentes entre ellos. En este proyecto, el dominio se corresponde con un sistema automatizado de captura y gestión de golpes de golf mediante visión por computador.
 
-El objetivo de este modelo no es describir todavía la implementación técnica del sistema, sino identificar los elementos relevantes del problema: el jugador, el campo, el hoyo, las cámaras, la sesión de captura, el evento detectado y el clip generado.
+El objetivo de este modelo no es describir todavía la implementación técnica del sistema, sino identificar los elementos conceptuales relevantes del problema: el usuario, el campo, el hoyo, la sesión de captura, el evento detectado y el clip generado.
 
 A partir de este modelo se establece una base conceptual común que sirve para definir posteriormente los requisitos, los casos de uso y el diseño del sistema.
-
 ## Glosario
 
 | Término                | Descripción                                                                                                              |
@@ -37,8 +36,6 @@ Los conceptos principales identificados en el dominio del sistema son los siguie
 
 * **Hoyo**: representa la zona específica del campo donde se produce el golpe. Cada hoyo puede tener cámaras asociadas.
 
-* **Cámara**: representa el dispositivo físico encargado de capturar vídeo. En el prototipo se contemplan cámaras con roles diferenciados: cámara lateral del tee, cámara posterior y cámara orientada al green.
-
 * **Sesión de captura**: representa la activación del sistema por parte de un jugador en un hoyo determinado. Esta sesión permite asociar correctamente los clips generados al usuario y al contexto de juego.
 
 * **Evento detectado**: representa el golpe identificado por el sistema. No todos los movimientos del jugador generan un clip; el sistema debe diferenciar entre movimientos previos, swings de práctica y golpes válidos.
@@ -47,41 +44,22 @@ Los conceptos principales identificados en el dominio del sistema son los siguie
 
 ## Diagrama de clases del dominio
 
-| Diagrama                                                                    | Código fuente                                                                  |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| ![Diagrama de clases del dominio](../recursos/diagramas/diagramaClases.png) | [Ver código del diagrama de clases](../recursos/diagramas/diagramaClases.puml) |
 
-El diagrama de clases del dominio representa las entidades principales del sistema y sus relaciones. En él se muestra cómo un usuario puede activar sesiones de captura, cómo estas sesiones se asocian a un campo y un hoyo, y cómo los eventos detectados pueden dar lugar a la generación de clips.
+![Diagrama de clases del dominio](../documentacion/imagenes/clases.svg)
 
-El modelo también incorpora la cámara como elemento del entorno físico asociado a un hoyo. Aunque el código QR interviene en el proceso de activación, no se considera la entidad central del dominio, sino un mecanismo utilizado para identificar el contexto de captura.
+El diagrama de clases del dominio representa las entidades principales del sistema y sus relaciones desde una perspectiva conceptual. En él se muestra cómo un usuario puede activar una sesión de captura, cómo dicha sesión se asocia a un campo y un hoyo, y cómo los eventos detectados pueden dar lugar a la generación de clips.
 
-De esta forma, el sistema puede mantener la trazabilidad entre el jugador, el campo, el hoyo, las cámaras y el clip generado.
+De esta forma, el modelo mantiene la trazabilidad entre el usuario, el contexto de juego y el contenido audiovisual generado, sin entrar todavía en detalles técnicos propios de la arquitectura o de la implementación.
 
 ## Diagrama de objetos
 
-| Diagrama                                                          | Código fuente                                                                    |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ![Diagrama de objetos](../recursos/diagramas/diagramaObjetos.png) | [Ver código del diagrama de objetos](../recursos/diagramas/diagramaObjetos.puml) |
+![Diagrama de objetos](../documentacion/imagenes/objetos.svg)
 
-El diagrama de objetos muestra un ejemplo concreto del funcionamiento del sistema en un momento determinado.
-
-En este ejemplo, un jugador inicia una sesión de captura en un hoyo concreto de un campo. Las cámaras asociadas a ese hoyo quedan vinculadas al contexto activo. Cuando el sistema detecta un swing válido, se genera un evento detectado que posteriormente da lugar a un clip asociado al usuario y al hoyo correspondiente.
-
-Este diagrama ayuda a comprender cómo se materializan las clases del dominio en una situación real de uso.
 
 ## Diagrama de estados
 
-| Diagrama                                                          | Código fuente                                                                    |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ![Diagrama de estados](../recursos/diagramas/diagramaEstados.png) | [Ver código del diagrama de estados](../recursos/diagramas/diagramaEstados.puml) |
+![Diagrama de estados](../documentacion/imagenes/estados.svg)
 
-El diagrama de estados representa el ciclo de vida del clip dentro del sistema.
-
-Un clip comienza como contenido pendiente o en proceso de generación. Una vez que el sistema valida el golpe y procesa el vídeo, el clip pasa a estar disponible para el usuario. A partir de ese momento, puede ser reproducido desde la aplicación móvil, marcado como favorito o quedar sujeto a la política de expiración.
-
-Si el clip no se marca como favorito, puede pasar a estado expirado y ser eliminado automáticamente por el sistema. En cambio, si el usuario lo marca como favorito, se conserva para futuras consultas.
-
-Este comportamiento permite controlar el almacenamiento del sistema y conservar únicamente los clips considerados relevantes por el usuario.
 
 # Disciplina de Requisitos
 
@@ -89,13 +67,10 @@ La disciplina de requisitos permite definir qué debe hacer el sistema, quién i
 
 En este proyecto, la especificación de requisitos se centra en el flujo completo del sistema: autenticación del usuario, activación del contexto de captura mediante código QR, detección automática del swing, generación de clips, consulta del contenido generado y funciones de administración.
 
-## Requisitos del sistema
-
-Los requisitos del sistema se dividen en requisitos funcionales y requisitos suplementarios.
-
-Los requisitos funcionales describen las acciones que debe permitir el sistema, mientras que los requisitos suplementarios establecen condiciones de calidad relacionadas con seguridad, rendimiento, disponibilidad, mantenibilidad y usabilidad.
 
 ## Requisitos funcionales
+
+En la memoria completa se especifican los requisitos funcionales del sistema con mayor nivel de detalle. Para la presentación se recoge una síntesis agrupada de los requisitos principales, centrada en las funcionalidades que delimitan el alcance de la solución.
 
 | Código | Requisito funcional                                                                                                                  |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -118,26 +93,11 @@ Los requisitos funcionales describen las acciones que debe permitir el sistema, 
 | RF-17  | El sistema deberá permitir a los administradores consultar usuarios, clips y estadísticas globales.                                  |
 | RF-18  | El sistema deberá permitir a los administradores realizar operaciones básicas de gestión sobre usuarios y clips.                     |
 
-## Requisitos suplementarios
-
-| Categoría      | Requisito                                                                                                                    |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Seguridad      | El acceso a clips y estadísticas deberá estar restringido a usuarios autenticados y autorizados.                             |
-| Seguridad      | Un jugador no deberá poder consultar clips ni estadísticas de otros usuarios.                                                |
-| Seguridad      | Las estadísticas globales y la gestión de usuarios deberán estar disponibles solo para administradores.                      |
-| Rendimiento    | El sistema deberá generar y dejar disponible el clip en un tiempo aceptable tras detectar un golpe válido.                   |
-| Fiabilidad     | El sistema deberá minimizar la generación de clips derivados de movimientos que no correspondan a un golpe real.             |
-| Fiabilidad     | El sistema deberá conservar correctamente la asociación entre usuario, campo, hoyo, cámara y clip.                           |
-| Disponibilidad | El sistema deberá detectar errores de cámara, procesamiento o almacenamiento sin generar registros incompletos.              |
-| Mantenibilidad | La solución deberá organizarse de forma modular, separando captura, procesamiento, backend, persistencia y aplicación móvil. |
-| Portabilidad   | La arquitectura deberá permitir futuras ampliaciones con nuevas cámaras, hoyos o sistemas de almacenamiento.                 |
-| Usabilidad     | La aplicación móvil deberá ofrecer una interacción sencilla para escanear QR, consultar clips y reproducir vídeos.           |
 
 ## Actores
 
-| Diagrama                                                                    | Código fuente                                                                             |
-| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![Jerarquía de actores](../recursos/diagramas/diagramaJerarquiaActores.png) | [Ver código de jerarquía de actores](../recursos/diagramas/diagramaJerarquiaActores.puml) |
+
+![Diagrama Jerarquía de actores](../documentacion/imagenes/jerarquiaActores.svg)
 
 En el sistema se identifican dos actores principales: el **Jugador** y el **Administrador**.
 
@@ -149,32 +109,11 @@ Ambos actores comparten la condición de usuarios autenticados, pero se diferenc
 
 ## Casos de uso por actor
 
-| Diagrama                                                                  | Código fuente                                                                            |
-| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| ![Diagrama de casos de uso](../recursos/diagramas/diagramaCasosDeUso.png) | [Ver código del diagrama de casos de uso](../recursos/diagramas/diagramaCasosDeUso.puml) |
+
+![Diagrama de casos de uso](../documentacion/imagenes/diagramaCasosDeUso.svg)
 
 Los casos de uso identificados representan las funcionalidades principales del sistema desde el punto de vista de los actores.
 
-### Casos de uso asociados al Jugador
-
-| Código | Caso de uso                         | Descripción                                                                 |
-| ------ | ----------------------------------- | --------------------------------------------------------------------------- |
-| CU-01  | Login                               | Permite acceder al sistema mediante credenciales.                           |
-| CU-02  | Escanear código QR del hoyo         | Permite activar el contexto de captura asociado a un campo y hoyo concreto. |
-| CU-03  | Consultar clips generados           | Permite visualizar y reproducir los clips asociados al usuario.             |
-| CU-04  | Marcar/Desmarcar clip como favorito | Permite conservar clips relevantes y evitar su eliminación automática.      |
-| CU-05  | Consultar estadísticas personales   | Permite consultar información resumida de la actividad del jugador.         |
-
-### Casos de uso asociados al Administrador
-
-| Código | Caso de uso                                 | Descripción                                                            |
-| ------ | ------------------------------------------- | ---------------------------------------------------------------------- |
-| CU-01  | Login                                       | Permite acceder al sistema mediante credenciales de administrador.     |
-| CU-03  | Consultar clips generados                   | Permite consultar clips registrados en el sistema.                     |
-| CU-06  | Gestionar clips registrados                 | Permite realizar operaciones de gestión sobre los clips almacenados.   |
-| CU-07  | Consultar usuarios del sistema              | Permite visualizar los usuarios registrados.                           |
-| CU-08  | Gestionar usuarios del sistema              | Permite modificar información básica de usuarios o eliminar cuentas.   |
-| CU-09  | Consultar estadísticas globales del sistema | Permite consultar información agregada del funcionamiento del sistema. |
 
 ## Relación entre casos de uso y requisitos funcionales
 
@@ -210,37 +149,13 @@ Los casos de uso de prioridad alta corresponden al flujo esencial del sistema: a
 
 ## Detalle de casos de uso
 
-### CU-01 - Login
+Voy a detallar los casos de uso mas importantes
 
-| Diagrama                                              | Código fuente                                                        |
-| ----------------------------------------------------- | -------------------------------------------------------------------- |
-| ![Caso de uso Login](../recursos/diagramas/Login.png) | [Ver código del caso de uso Login](../recursos/diagramas/Login.puml) |
-
-**Actor principal:** Jugador / Administrador.
-
-**Descripción:**
-Permite que un usuario acceda al sistema mediante sus credenciales. El sistema valida la identidad del usuario y le muestra las funcionalidades correspondientes según su perfil.
-
-**Precondición:**
-El usuario debe estar registrado en el sistema.
-
-**Resultado esperado:**
-El usuario accede correctamente a la aplicación y se aplican los permisos asociados a su rol.
-
-**Criterios de aceptación:**
-
-* El sistema valida las credenciales introducidas.
-* El sistema diferencia entre jugador y administrador.
-* El sistema impide el acceso con credenciales incorrectas.
-* El sistema redirige al usuario a la interfaz correspondiente.
-
----
 
 ### CU-02 - Escanear código QR del hoyo
 
-| Diagrama                                                         | Código fuente                                                                   |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| ![Caso de uso Escanear QR](../recursos/diagramas/EscanearQR.png) | [Ver código del caso de uso Escanear QR](../recursos/diagramas/EscanearQR.puml) |
+
+![Caso de uso Escanear QR](../recursos/diagramas/EscanearQR.png) 
 
 **Actor principal:** Jugador.
 
@@ -265,9 +180,8 @@ El sistema crea una sesión activa y asocia el usuario al campo, hoyo y cámaras
 
 ### CU-03 - Consultar clips generados
 
-| Diagrama                                                                 | Código fuente                                                                           |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| ![Caso de uso Consultar clips](../recursos/diagramas/ConsultarClips.png) | [Ver código del caso de uso Consultar clips](../recursos/diagramas/ConsultarClips.puml) |
+
+![Caso de uso Consultar clips](../recursos/diagramas/ConsultarClips.png)
 
 **Actor principal:** Jugador / Administrador.
 
@@ -286,180 +200,4 @@ El sistema muestra una lista de clips disponibles con información básica como 
 * El administrador puede consultar clips del sistema.
 * Cada clip muestra información básica de contexto.
 * Los clips disponibles pueden reproducirse desde la aplicación móvil.
-
----
-
-### CU-04 - Marcar/Desmarcar clip como favorito
-
-| Diagrama                                                                          | Código fuente                                                                                    |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| ![Caso de uso Marcar favorito](../recursos/diagramas/MarcarDesmarcarFavorito.png) | [Ver código del caso de uso Marcar favorito](../recursos/diagramas/MarcarDesmarcarFavorito.puml) |
-
-**Actor principal:** Jugador / Administrador.
-
-**Descripción:**
-Permite cambiar el estado de favorito de un clip. Los clips favoritos se conservan y no se eliminan automáticamente por la política de expiración.
-
-**Precondición:**
-El usuario debe tener permiso para acceder al clip seleccionado.
-
-**Resultado esperado:**
-El sistema actualiza correctamente el estado de favorito del clip.
-
-**Criterios de aceptación:**
-
-* El usuario puede marcar un clip como favorito.
-* El usuario puede desmarcar un clip favorito.
-* El sistema respeta el límite máximo de favoritos definido.
-* Los clips favoritos no se eliminan automáticamente.
-
----
-
-### CU-05 - Consultar estadísticas personales
-
-| Diagrama                                                                                | Código fuente                                                                                          |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| ![Caso de uso Estadísticas personales](../recursos/diagramas/ConsultarEstadisticas.png) | [Ver código del caso de uso Estadísticas personales](../recursos/diagramas/ConsultarEstadisticas.puml) |
-
-**Actor principal:** Jugador.
-
-**Descripción:**
-Permite al jugador consultar información resumida de su actividad dentro del sistema, como número de clips generados, clips favoritos o actividad por hoyos.
-
-**Precondición:**
-El jugador debe haber iniciado sesión.
-
-**Resultado esperado:**
-El sistema muestra estadísticas correspondientes únicamente al usuario autenticado.
-
-**Criterios de aceptación:**
-
-* El jugador solo ve sus propias estadísticas.
-* El sistema calcula la información a partir de los clips almacenados.
-* La pantalla muestra datos resumidos de forma clara.
-
----
-
-### CU-06 - Gestionar clips registrados
-
-| Diagrama                                                                 | Código fuente                                                                           |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| ![Caso de uso Gestionar clips](../recursos/diagramas/GestionarClips.png) | [Ver código del caso de uso Gestionar clips](../recursos/diagramas/GestionarClips.puml) |
-
-**Actor principal:** Administrador.
-
-**Descripción:**
-Permite al administrador consultar y gestionar clips registrados en el sistema. Esta funcionalidad está orientada a la supervisión y mantenimiento del contenido almacenado.
-
-**Precondición:**
-El administrador debe haber iniciado sesión.
-
-**Resultado esperado:**
-El sistema permite aplicar operaciones de gestión sobre los clips disponibles.
-
-**Criterios de aceptación:**
-
-* Solo el administrador puede acceder a esta funcionalidad.
-* El administrador puede consultar clips registrados.
-* El administrador puede eliminar clips cuando sea necesario.
-* El sistema actualiza correctamente la información tras cada operación.
-
----
-
-### CU-07 - Consultar usuarios del sistema
-
-| Diagrama                                                                      | Código fuente                                                                                |
-| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| ![Caso de uso Consultar usuarios](../recursos/diagramas/ConsultarUsarios.png) | [Ver código del caso de uso Consultar usuarios](../recursos/diagramas/ConsultarUsarios.puml) |
-
-**Actor principal:** Administrador.
-
-**Descripción:**
-Permite al administrador consultar las cuentas registradas en el sistema.
-
-**Precondición:**
-El administrador debe haber iniciado sesión.
-
-**Resultado esperado:**
-El sistema muestra la lista de usuarios registrados con información básica.
-
-**Criterios de aceptación:**
-
-* Solo el administrador puede consultar usuarios.
-* El sistema muestra los datos básicos de las cuentas.
-* La información se presenta de forma clara para facilitar la supervisión.
-
----
-
-### CU-08 - Gestionar usuarios del sistema
-
-| Diagrama                                                                       | Código fuente                                                                                 |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| ![Caso de uso Gestionar usuarios](../recursos/diagramas/GestionarUsuarios.png) | [Ver código del caso de uso Gestionar usuarios](../recursos/diagramas/GestionarUsuarios.puml) |
-
-**Actor principal:** Administrador.
-
-**Descripción:**
-Permite al administrador realizar operaciones básicas de gestión sobre usuarios registrados, como modificar información básica o eliminar cuentas.
-
-**Precondición:**
-El administrador debe haber iniciado sesión y el usuario afectado debe existir.
-
-**Resultado esperado:**
-El sistema aplica la operación solicitada sobre la cuenta seleccionada.
-
-**Criterios de aceptación:**
-
-* Solo el administrador puede gestionar usuarios.
-* El sistema permite modificar datos básicos de una cuenta.
-* El sistema permite eliminar cuentas cuando sea necesario.
-* Los cambios se guardan correctamente.
-
----
-
-### CU-09 - Consultar estadísticas globales del sistema
-
-| Diagrama                                                                                      | Código fuente                                                                                                |
-| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| ![Caso de uso Estadísticas globales](../recursos/diagramas/ConsultarEstadísticasGlobales.png) | [Ver código del caso de uso Estadísticas globales](../recursos/diagramas/ConsultarEstadísticasGlobales.puml) |
-
-**Actor principal:** Administrador.
-
-**Descripción:**
-Permite al administrador consultar estadísticas agregadas del sistema, como número total de usuarios, número de clips generados, clips favoritos, campos registrados o actividad por hoyos.
-
-**Precondición:**
-El administrador debe haber iniciado sesión.
-
-**Resultado esperado:**
-El sistema muestra estadísticas globales accesibles únicamente al perfil administrador.
-
-**Criterios de aceptación:**
-
-* Solo el administrador puede acceder a estadísticas globales.
-* El sistema calcula la información a partir de los datos almacenados.
-* Las estadísticas reflejan la actividad general del sistema.
-
-## Prototipado de casos de uso
-
-Los prototipos de interfaz permiten visualizar cómo se materializan los principales casos de uso dentro de la aplicación móvil.
-
-| Caso de uso                                  | Prototipo                                            |
-| -------------------------------------------- | ---------------------------------------------------- |
-| CU-01 Login                                  | Pantalla de inicio de sesión.                        |
-| CU-02 Escanear QR                            | Pantalla de escaneo mediante cámara del móvil.       |
-| CU-03 Consultar clips                        | Pantalla de listado de clips generados.              |
-| CU-04 Marcar/Desmarcar favorito              | Botón de favorito dentro de cada clip.               |
-| CU-05 Consultar estadísticas personales      | Pantalla de estadísticas del jugador.                |
-| CU-06 Gestionar clips registrados            | Pantalla de administración de clips.                 |
-| CU-07 / CU-08 Consultar y gestionar usuarios | Pantallas de listado y gestión de usuarios.          |
-| CU-09 Consultar estadísticas globales        | Pantalla de estadísticas globales del administrador. |
-
-## Conclusión de la disciplina de requisitos
-
-La disciplina de requisitos permite concretar el alcance funcional del sistema y diferenciar las responsabilidades de cada actor.
-
-El jugador dispone de las funcionalidades necesarias para activar la captura, consultar sus clips, reproducirlos, marcarlos como favoritos y revisar estadísticas personales. El administrador, por su parte, cuenta con funciones de supervisión sobre usuarios, clips y estadísticas globales.
-
-Los casos de uso definidos permiten cubrir el flujo principal del sistema: autenticación, escaneo QR, activación de cámaras, generación automática de clips, consulta del contenido y gestión administrativa. Esta especificación servirá como base para el análisis y diseño del sistema.
 
