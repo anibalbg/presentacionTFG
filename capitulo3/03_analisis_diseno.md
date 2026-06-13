@@ -1,6 +1,6 @@
 # Capítulo 3 - Análisis y diseño
 
-## 1. Introducción
+## Introducción
 
 Una vez definidos el modelo del dominio, los requisitos funcionales, los actores y los casos de uso principales, el siguiente paso consiste en transformar esa especificación en una estructura más cercana a la implementación.
 
@@ -19,7 +19,7 @@ En este capítulo se presentan los elementos principales del diseño del sistema
 
 ---
 
-## 2. Arquitectura del sistema
+## Arquitectura del sistema
 
 El sistema propuesto presenta una arquitectura distribuida, formada por varios componentes físicos y lógicos que colaboran entre sí para realizar el flujo completo de captura, procesamiento, almacenamiento y consulta de clips.
 
@@ -43,7 +43,7 @@ Esta separación permite que el sistema sea más mantenible y facilite futuras a
 
 ---
 
-## 3. Capas principales de la arquitectura
+## Capas principales de la arquitectura
 
 La solución se organiza en varias capas funcionales:
 
@@ -69,7 +69,7 @@ Incluye la base de datos y el almacenamiento multimedia. La base de datos almace
 
 ---
 
-## 4. Análisis de casos de uso
+## Análisis de casos de uso
 
 A partir de los casos de uso definidos en el capítulo anterior, se analizan las responsabilidades internas necesarias para llevarlos a cabo.
 
@@ -87,7 +87,7 @@ Este análisis permite pasar de una descripción externa de los casos de uso a u
 
 ---
 
-## 5. Diseño de casos de uso
+## Diseño de casos de uso
 
 Para diseñar los casos de uso se utiliza una separación basada en clases modelo, clases vista y clases controladoras.
 
@@ -102,11 +102,11 @@ Esta separación permite reducir el acoplamiento entre interfaz, lógica de nego
 
 ---
 
-## 6. Diagramas de secuencia de diseño
+## Diagramas de secuencia de diseño
 
 Para representar el comportamiento interno de los flujos más relevantes se han definido dos diagramas de secuencia de diseño.
 
-### 6.1 Escaneo del código QR
+### Escaneo del código QR
 
 
  [Diagrama secuencia QR](../documentacion/imagenes/secuenciaQR.svg) |
@@ -115,7 +115,7 @@ Este diagrama representa el proceso de activación del contexto de captura. El j
 
 El resultado del flujo es la creación o actualización de una sesión activa, que permite asociar correctamente los clips generados posteriormente al usuario y al contexto de juego.
 
-### 6.2 Generación automática del clip
+### Generación automática del clip
 
 
 [Diagrama secuencia clip](../documentacion/imagenes/secuenciaClip.svg) |
@@ -126,11 +126,11 @@ Si el evento detectado se considera válido, el sistema recorta el intervalo rel
 
 ---
 
-## 7. Análisis de clases
+## Análisis de clases
 
 El sistema se organiza en tres grupos principales de clases: modelo, vista y controladoras.
 
-### 7.1 Clases modelo
+### Clases modelo
 
 
 [Diagrama clases modelo](../documentacion/imagenes/clasesModelo.svg) |
@@ -151,7 +151,7 @@ Entre ellas se encuentran:
 
 Estas clases forman la base conceptual del sistema y permiten mantener la trazabilidad entre usuario, contexto de captura, evento detectado y clip generado.
 
-### 7.2 Clases vista
+### Clases vista
 
 
 [Diagrama clases vista](../documentacion/imagenes/vista.svg) |
@@ -171,7 +171,7 @@ Entre las vistas principales se encuentran:
 | VistaGestionUsuarios        | Permite al administrador gestionar usuarios.          |
 | VistaEstadisticasGlobales   | Muestra estadísticas globales del sistema.            |
 
-### 7.3 Clases controladoras
+### Clases controladoras
 
 
  [Diagrama clases controladoras](../documentacion/imagenes/controladora.svg) |
@@ -194,7 +194,7 @@ Esta organización permite que cada caso de uso tenga una responsabilidad de con
 
 ---
 
-## 8. Servicios internos del sistema
+## Servicios internos del sistema
 
 Además de las clases modelo, vista y controladoras, el diseño incorpora servicios internos encargados de tareas técnicas reutilizables.
 
@@ -210,7 +210,7 @@ Estos servicios permiten separar la lógica técnica de procesamiento y mantenim
 
 ---
 
-## 9. Diseño de paquetes
+## Diseño de paquetes
 
 
 [Diagrama paquetes](../documentacion/imagenes/paquetes.svg) |
@@ -232,7 +232,7 @@ La organización por paquetes permite reducir el acoplamiento entre componentes 
 
 ---
 
-## 10. Modelo lógico de la base de datos
+## Modelo lógico de la base de datos
 
 
 [Diagrama entidad relacion](../documentacion/imagenes/entidadRelacion.svg) |
@@ -255,7 +255,7 @@ El código QR no se almacena como entidad independiente, ya que funciona como me
 
 ---
 
-## 11. Modelo físico propuesto
+## Modelo físico propuesto
 
 A nivel físico, el prototipo simplifica parte del modelo lógico para adaptarlo a la implementación real.
 
@@ -272,7 +272,7 @@ Esta simplificación permite reducir la complejidad del prototipo sin perder la 
 
 ---
 
-## 12. Modelo de despliegue
+## Modelo de despliegue
 
 
 [Diagrama despliegue](../documentacion/imagenes/diagramaDespliegue.svg) |
