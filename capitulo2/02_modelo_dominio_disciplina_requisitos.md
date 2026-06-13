@@ -47,9 +47,8 @@ Los conceptos principales identificados en el dominio del sistema son los siguie
 
 ## Diagrama de clases del dominio
 
-| Diagrama                                                                    | Código fuente                                                                  |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| ![Diagrama de clases del dominio](../recursos/diagramas/diagramaClases.png) | [Ver código del diagrama de clases](../recursos/diagramas/diagramaClases.puml) |
+
+| ![Diagrama de clases del dominio](documentacion\imagenes\clases.svg)
 
 El diagrama de clases del dominio representa las entidades principales del sistema y sus relaciones. En él se muestra cómo un usuario puede activar sesiones de captura, cómo estas sesiones se asocian a un campo y un hoyo, y cómo los eventos detectados pueden dar lugar a la generación de clips.
 
