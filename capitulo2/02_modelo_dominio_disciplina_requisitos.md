@@ -37,8 +37,6 @@ Los conceptos principales identificados en el dominio del sistema son los siguie
 
 * **Hoyo**: representa la zona específica del campo donde se produce el golpe. Cada hoyo puede tener cámaras asociadas.
 
-* **Cámara**: representa el dispositivo físico encargado de capturar vídeo. En el prototipo se contemplan cámaras con roles diferenciados: cámara lateral del tee, cámara posterior y cámara orientada al green.
-
 * **Sesión de captura**: representa la activación del sistema por parte de un jugador en un hoyo determinado. Esta sesión permite asociar correctamente los clips generados al usuario y al contexto de juego.
 
 * **Evento detectado**: representa el golpe identificado por el sistema. No todos los movimientos del jugador generan un clip; el sistema debe diferenciar entre movimientos previos, swings de práctica y golpes válidos.
@@ -50,33 +48,16 @@ Los conceptos principales identificados en el dominio del sistema son los siguie
 
 ![Diagrama de clases del dominio](../documentacion/imagenes/clases.svg)
 
-El diagrama de clases del dominio representa las entidades principales del sistema y sus relaciones. En él se muestra cómo un usuario puede activar sesiones de captura, cómo estas sesiones se asocian a un campo y un hoyo, y cómo los eventos detectados pueden dar lugar a la generación de clips.
-
-El modelo también incorpora la cámara como elemento del entorno físico asociado a un hoyo. Aunque el código QR interviene en el proceso de activación, no se considera la entidad central del dominio, sino un mecanismo utilizado para identificar el contexto de captura.
-
-De esta forma, el sistema puede mantener la trazabilidad entre el jugador, el campo, el hoyo, las cámaras y el clip generado.
 
 ## Diagrama de objetos
 
 ![Diagrama de objetos](../documentacion/imagenes/objetos.svg)
 
-El diagrama de objetos muestra un ejemplo concreto del funcionamiento del sistema en un momento determinado.
-
-En este ejemplo, un jugador inicia una sesión de captura en un hoyo concreto de un campo. Las cámaras asociadas a ese hoyo quedan vinculadas al contexto activo. Cuando el sistema detecta un swing válido, se genera un evento detectado que posteriormente da lugar a un clip asociado al usuario y al hoyo correspondiente.
-
-Este diagrama ayuda a comprender cómo se materializan las clases del dominio en una situación real de uso.
 
 ## Diagrama de estados
 
 ![Diagrama de estados](../documentacion/imagenes/estados.svg)
 
-El diagrama de estados representa el ciclo de vida del clip dentro del sistema.
-
-Un clip comienza como contenido pendiente o en proceso de generación. Una vez que el sistema valida el golpe y procesa el vídeo, el clip pasa a estar disponible para el usuario. A partir de ese momento, puede ser reproducido desde la aplicación móvil, marcado como favorito o quedar sujeto a la política de expiración.
-
-Si el clip no se marca como favorito, puede pasar a estado expirado y ser eliminado automáticamente por el sistema. En cambio, si el usuario lo marca como favorito, se conserva para futuras consultas.
-
-Este comportamiento permite controlar el almacenamiento del sistema y conservar únicamente los clips considerados relevantes por el usuario.
 
 # Disciplina de Requisitos
 
