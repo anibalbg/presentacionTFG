@@ -48,7 +48,7 @@ Los conceptos principales identificados en el dominio del sistema son los siguie
 ## Diagrama de clases del dominio
 
 
-![Diagrama de clases del dominio](...\documentacion\imagenes\clases.svg)
+![Diagrama de clases del dominio](../documentacion/imagenes/clases.svg)
 
 El diagrama de clases del dominio representa las entidades principales del sistema y sus relaciones. En él se muestra cómo un usuario puede activar sesiones de captura, cómo estas sesiones se asocian a un campo y un hoyo, y cómo los eventos detectados pueden dar lugar a la generación de clips.
 
@@ -58,7 +58,7 @@ De esta forma, el sistema puede mantener la trazabilidad entre el jugador, el ca
 
 ## Diagrama de objetos
 
-![Diagrama de objetos](../recursos/diagramas/diagramaObjetos.png)
+![Diagrama de objetos](../documentacion/imagenes/objetos.svg)
 
 El diagrama de objetos muestra un ejemplo concreto del funcionamiento del sistema en un momento determinado.
 
@@ -68,7 +68,7 @@ Este diagrama ayuda a comprender cómo se materializan las clases del dominio en
 
 ## Diagrama de estados
 
-![Diagrama de estados](../recursos/diagramas/diagramaEstados.png) 
+![Diagrama de estados](../documentacion/imagenes/estados.svg)
 
 El diagrama de estados representa el ciclo de vida del clip dentro del sistema.
 
@@ -117,7 +117,7 @@ Los requisitos funcionales describen las acciones que debe permitir el sistema, 
 ## Actores
 
 
-![Jerarquía de actores](../recursos/diagramas/diagramaJerarquiaActores.png)
+![Diagrama Jerarquía de actores](../documentacion/imagenes/jerarquiaActores.svg)
 
 En el sistema se identifican dos actores principales: el **Jugador** y el **Administrador**.
 
@@ -130,7 +130,7 @@ Ambos actores comparten la condición de usuarios autenticados, pero se diferenc
 ## Casos de uso por actor
 
 
-![Diagrama de casos de uso](../recursos/diagramas/diagramaCasosDeUso.png)
+![Diagrama de casos de uso](../documentacion/imagenes/diagramaCasosDeUso.svg)
 
 Los casos de uso identificados representan las funcionalidades principales del sistema desde el punto de vista de los actores.
 
