@@ -4,10 +4,9 @@
 
 El modelo del dominio permite representar los conceptos principales que forman parte del sistema y las relaciones existentes entre ellos. En este proyecto, el dominio se corresponde con un sistema automatizado de captura y gestión de golpes de golf mediante visión por computador.
 
-El objetivo de este modelo no es describir todavía la implementación técnica del sistema, sino identificar los elementos relevantes del problema: el jugador, el campo, el hoyo, las cámaras, la sesión de captura, el evento detectado y el clip generado.
+El objetivo de este modelo no es describir todavía la implementación técnica del sistema, sino identificar los elementos conceptuales relevantes del problema: el usuario, el campo, el hoyo, la sesión de captura, el evento detectado y el clip generado.
 
 A partir de este modelo se establece una base conceptual común que sirve para definir posteriormente los requisitos, los casos de uso y el diseño del sistema.
-
 ## Glosario
 
 | Término                | Descripción                                                                                                              |
@@ -48,6 +47,9 @@ Los conceptos principales identificados en el dominio del sistema son los siguie
 
 ![Diagrama de clases del dominio](../documentacion/imagenes/clases.svg)
 
+El diagrama de clases del dominio representa las entidades principales del sistema y sus relaciones desde una perspectiva conceptual. En él se muestra cómo un usuario puede activar una sesión de captura, cómo dicha sesión se asocia a un campo y un hoyo, y cómo los eventos detectados pueden dar lugar a la generación de clips.
+
+De esta forma, el modelo mantiene la trazabilidad entre el usuario, el contexto de juego y el contenido audiovisual generado, sin entrar todavía en detalles técnicos propios de la arquitectura o de la implementación.
 
 ## Diagrama de objetos
 
@@ -70,7 +72,7 @@ En este proyecto, la especificación de requisitos se centra en el flujo complet
 
 ## Requisitos funcionales
 
-No estan todos los requisitos del sistema
+En la memoria completa se especifican los requisitos funcionales del sistema con mayor nivel de detalle. Para la presentación se recoge una síntesis agrupada de los requisitos principales, centrada en las funcionalidades que delimitan el alcance de la solución.
 
 | Código | Requisito funcional                                                                                                                  |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------ |
