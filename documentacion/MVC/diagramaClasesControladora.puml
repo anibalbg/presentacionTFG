@@ -6,7 +6,7 @@ skinparam shadowing false
 skinparam linetype ortho
 skinparam packageStyle rectangle
 
-left to right direction
+top to bottom direction
 
 package "Clases vista" {
   class VistaLogin <<vista>>

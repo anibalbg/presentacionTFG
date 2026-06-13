@@ -5,16 +5,7 @@ skinparam shadowing false
 skinparam linetype ortho
 hide circle
 
-entity "Usuario" as Usuario {
-  * id_usuario : entero <<PK>>
-  --
-  nombre_usuario : texto
-  email : texto
-  contrasena_hash : texto
-  fecha_registro : fecha/hora
-  activo : booleano
-  tipo_usuario : texto
-}
+top to bottom direction
 
 entity "Campo" as Campo {
   * id_campo : entero <<PK>>
@@ -35,18 +26,20 @@ entity "Camara" as Camara {
   * id_camara : entero <<PK>>
   --
   id_hoyo : entero <<FK>>
-  posición : texto
+  nombre : texto
+  rol : texto
   activo : booleano
 }
 
-entity "CodigoQR" as CodigoQR {
-  * id_qr : entero <<PK>>
+entity "Usuario" as Usuario {
+  * id_usuario : entero <<PK>>
   --
-  id_hoyo : entero <<FK>>
-  id_camara : entero <<FK nullable>>
-  url : texto
-  fecha_creacion : fecha/hora
+  nombre_usuario : texto
+  email : texto
+  contrasena_hash : texto
+  fecha_registro : fecha/hora
   activo : booleano
+  tipo_usuario : texto
 }
 
 entity "SesionCaptura" as SesionCaptura {
@@ -54,7 +47,7 @@ entity "SesionCaptura" as SesionCaptura {
   --
   id_usuario : entero <<FK>>
   id_hoyo : entero <<FK>>
-  id_qr : entero <<FK>>
+  id_camara : entero <<FK>>
   fecha_inicio : fecha/hora
   fecha_fin : fecha/hora
   activo : booleano
@@ -75,55 +68,26 @@ entity "Clip" as Clip {
   --
   id_usuario : entero <<FK>>
   id_hoyo : entero <<FK>>
-  id_evento : entero <<FK>>
+  id_evento : entero <<FK nullable>>
   archivo : texto
   fecha_creacion : fecha/hora
   favorito : booleano
   fecha_expiracion : fecha/hora
 }
 
-entity "SegmentoClip" as SegmentoClip {
-  * id_segmento : entero <<PK>>
-  --
-  id_clip : entero <<FK>>
-  id_camara : entero <<FK>>
-  tipo_vista : texto
-  orden : entero
-  archivo_segmento : texto
-}
-
-entity "Estadistica <<derivada>>" as Estadistica {
-  --
-  id_usuario : entero <<FK nullable>>
-  total_clips : entero
-  total_favoritos : entero
-  hoyos_jugados : entero
-  fecha_generacion : fecha/hora
-  tipo : texto
-}
-
 Campo ||--o{ Hoyo : contiene
 
 Hoyo ||--o{ Camara : tiene
-Hoyo ||--o{ CodigoQR : identifica
-
-Camara |o--o{ CodigoQR : puede_generar
-
-Usuario ||--o{ SesionCaptura : activa
 Hoyo ||--o{ SesionCaptura : contextualiza
-CodigoQR ||--o{ SesionCaptura : inicia
-
-SesionCaptura ||--o{ EventoDetectado : registra
-EventoDetectado ||--o| Clip : genera
-
-Usuario ||--o{ Clip : posee
 Hoyo ||--o{ Clip : se_produce_en
 
-Clip ||--o{ SegmentoClip : se_compone_de
-Camara ||--o{ SegmentoClip : captura
+Camara ||--o{ SesionCaptura : inicia_contexto
 
-Usuario ..> Estadistica : consulta
-Clip ..> Estadistica : calcula
+Usuario ||--o{ SesionCaptura : activa
+Usuario ||--o{ Clip : posee
 
+SesionCaptura ||--o{ EventoDetectado : registra
+
+EventoDetectado ||--o| Clip : genera
 
 @enduml
