@@ -95,3 +95,5 @@ Quedan fuera del alcance del prototipo:
 | Análisis biomecánico profesional del swing               | El sistema detecta el evento, no realiza análisis técnico avanzado del movimiento.      |
 
 ---
+## Demostración del prototipo
+[Contenido](../documentacion/contenido/)
