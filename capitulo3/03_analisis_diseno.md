@@ -118,7 +118,7 @@ El resultado del flujo es la creación o actualización de una sesión activa, q
 ### Generación automática del clip
 
 
-![Diagrama de secuencia - Generación automática de clip(../documentacion/imagenes/secuenciaClip.svg)
+![Diagrama de secuencia - Generación automática de clip](../documentacion/imagenes/secuenciaClip.svg)
 
 Este diagrama representa el proceso interno de generación de un clip. La cámara proporciona la secuencia de vídeo al módulo de detección, que analiza el movimiento del jugador y la información visual de la bola.
 
