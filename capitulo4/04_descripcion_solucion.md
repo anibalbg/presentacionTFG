@@ -96,4 +96,4 @@ Quedan fuera del alcance del prototipo:
 
 ---
 ## Demostración del prototipo
-[Contenido](documentacion/contenido/)
+[Contenido](../documentacion/contenido/)
